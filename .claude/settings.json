@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bun run ./src/main.ts send:*)",
+      "Bash(bun run ./src/main.ts messages delete:*)"
+    ],
+    "deny": []
+  }
+}
