@@ -16,42 +16,90 @@ bun run ./src/main.ts
 # Format code
 bun run fmt
 
-# Lint code
+# Lint code  
 bun run lint
+
+# Type check (no test command defined yet)
+bun tsc --noEmit
 ```
 
-### Key Commands
-- `ccteam start` - Initialize tmux session with 3 Claude Code instances
-- `ccteam send <role> <message>` - Send message to specific role (manager/leader/worker)
-- `ccteam messages delete <message>` - Delete processed message files
+### CLI Usage
+```bash
+# Initialize tmux session with 3 Claude Code instances
+ccteam start
+
+# Send message to specific role (for agents only)
+ccteam send <role> <message>  # role: manager|leader|worker
+
+# Delete processed message files (for agents only)
+ccteam messages delete <message-file>
+```
 
 ## Architecture
 
 ### Three-Role System
 1. **Manager** - Receives user requests, decomposes tasks, delegates to Leader
-2. **Leader** - Reviews Manager's tasks, creates implementation specs for Worker, reviews Worker's output
+2. **Leader** - Reviews Manager's tasks, creates implementation specs for Worker, reviews Worker's output  
 3. **Worker** - Implements code based on Leader's specifications
 
 ### Communication Protocol
 - Messages between roles use file-based communication via `.ccteam/messages/` directory
 - Each role has a prefix: `[MANAGER]`, `[LEADER]`, `[WORKER]`
 - Messages are sent using the CLI's `send` command, NOT direct tmux commands
+- Message files must follow naming pattern: `{sender}-to-{receiver}-{id}.md`
 
-### Key Technical Details
-- **Runtime**: Bun v1.2.16
+### Code Patterns
+
+**Command Structure**:
+- Commands are implemented in `src/cmd/{command-name}/index.ts`
+- All commands are async functions with typed parameters
+- Commands can import and reuse other commands (e.g., `start` uses `send`)
+
+**Error Handling**:
+- Early validation with clear error messages
+- File existence checks before operations
+- Automatic directory creation with `{ recursive: true }`
+
+**Logging Convention**:
+- Use `[INFO]` prefix for all console logs
+- Progress messages for multi-step operations
+- Decorative completion messages with emoji and separators
+
+**File Operations**:
+- Always use `path.join(process.cwd(), ".ccteam", ...)` for paths
+- Check existence before file operations
+- Use Bun's text import syntax for markdown files: `import ... with { type: "text" }`
+
+### Technical Stack
+- **Runtime**: Bun v1.2.16 (direct TypeScript execution)
 - **Language**: TypeScript with ESNext target and strict mode
 - **Module Resolution**: Bundler mode
 - **Code Quality**: Biome for formatting/linting with pre-commit hooks
-- **Message Files**: Markdown files in `.ccteam/messages/` with role-specific naming conventions
+- **CLI Framework**: Commander.js
+- **No testing framework configured yet**
 
 ### Important Constraints
 - Never use `tmux send-keys` directly - always use `bun run ./src/main.ts send`
 - Never use `rm` to delete message files - always use `bun run ./src/main.ts messages delete`
-- Message files must follow naming pattern: `{sender}-to-{receiver}-{id}.md`
+- Tmux operations must use the `tmux()` wrapper in `lib/tmux.ts`
+- All role instructions are embedded in the binary from `src/instructions/*.md`
 
-## File Structure
-- `src/main.ts` - CLI entry point
-- `src/cmd/` - Command implementations
-- `src/instructions/` - Role-specific instruction documents
-- `src/lib/` - Utilities (tmux wrapper, general utils)
-- `src/types/` - TypeScript type definitions
+## Project Structure
+```
+src/
+├── main.ts              # CLI entry point
+├── cmd/                 # Command implementations
+│   ├── messages/        # Message management commands
+│   ├── send/            # Message sending command
+│   └── start/           # Session initialization command
+├── instructions/        # Role-specific instruction documents
+├── lib/                 # Shared utilities
+│   ├── tmux.ts          # tmux command wrapper
+│   └── util.ts          # General utilities (sleep, etc.)
+└── types/               # TypeScript type definitions
+```
+
+## Development Notes
+- Pre-commit hooks run Biome formatting/linting via Husky
+- TypeScript is not transpiled - Bun executes `.ts` files directly
+- The `.ccteam/` directory is created at runtime in the working directory
