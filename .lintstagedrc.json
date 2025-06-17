@@ -1,0 +1,5 @@
+{
+  "*": [
+    "biome check --write --unsafe --no-errors-on-unmatched --files-ignore-unknown=true"
+  ]
+}
