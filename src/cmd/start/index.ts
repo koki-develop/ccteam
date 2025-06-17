@@ -10,13 +10,15 @@ import workerInstruction from "../../instructions/worker.md" with {
   type: "text",
 };
 import { tmux } from "../../lib/tmux";
-import { sleep } from "../../lib/util";
+import { generateSessionName, saveSessionName, sleep } from "../../lib/util";
 import { send } from "../send";
 
 export async function start() {
   console.log("[INFO] Starting ccteam initialization...");
 
-  const session = "ccteam";
+  const session = generateSessionName();
+  saveSessionName(session);
+
   await tmux(
     // Create a new session
     "new-session",
@@ -61,7 +63,7 @@ export async function start() {
   await setupEditor(session);
   console.log("[INFO] All roles initialized");
 
-  showAttachInstructions();
+  showAttachInstructions(session);
 }
 
 async function setupInstructions() {
@@ -112,10 +114,10 @@ Please read @.ccteam/instructions/worker.md and understand your role.
   await send({ session, role: "worker", message: prompt });
 }
 
-function showAttachInstructions() {
+function showAttachInstructions(session: string) {
   console.log("=".repeat(60));
   console.log("  🎉 ccteam initialization completed!");
   console.log("  To attach to the session, run the following command:");
-  console.log("    $ tmux attach-session -t ccteam");
+  console.log(`    $ tmux attach-session -t ${session}`);
   console.log("=".repeat(60));
 }

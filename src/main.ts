@@ -2,6 +2,7 @@ import { Command } from "commander";
 import { deleteMessage } from "./cmd/messages";
 import { send } from "./cmd/send";
 import { start } from "./cmd/start";
+import { loadSessionName } from "./lib/util";
 
 const program = new Command();
 
@@ -28,7 +29,8 @@ program
   .argument("<role>", "The role to send message to (worker/leader/manager)")
   .argument("<message>", "The message to send")
   .action(async (role, message) => {
-    await send({ role, message, session: "ccteam" });
+    const session = loadSessionName();
+    await send({ role, message, session });
   });
 
 const messagesCmd = program
