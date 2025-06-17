@@ -3,6 +3,9 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "dependencies": {
+    "commander": "14.0.0"
+  },
   "devDependencies": {
     "@types/bun": "1.2.16",
     "typescript": "5.8.3"
