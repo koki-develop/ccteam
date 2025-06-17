@@ -10,5 +10,8 @@ export async function deleteMessage(message: string) {
   const messagePath = path.join(messageDir, message);
   if (fs.existsSync(messagePath)) {
     fs.rmSync(messagePath);
+    console.log(`[INFO] "${message}" deleted successfully`);
+  } else {
+    console.log(`[INFO] "${message}" not found (already deleted)`);
   }
 }

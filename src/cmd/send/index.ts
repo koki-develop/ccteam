@@ -18,7 +18,6 @@ export async function send({ session, role, message }: SnedParams) {
   }
 
   const target = `${session}:0.${roleMap[role]}`;
-
   await tmux("send-keys", "-t", target, message);
   await sleep(1000);
   await tmux("send-keys", "-t", target, "C-m");

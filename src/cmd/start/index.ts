@@ -14,8 +14,9 @@ import { sleep } from "../../lib/util";
 import { send } from "../send";
 
 export async function start() {
-  const session = "ccteam";
+  console.log("[INFO] Starting ccteam initialization...");
 
+  const session = "ccteam";
   await tmux(
     // Create a new session
     "new-session",
@@ -51,12 +52,16 @@ export async function start() {
     "-t",
     `${session}:0.0`,
   );
+  console.log(`[INFO] Created tmux session: ${session}`);
 
+  console.log("[INFO] Setting up roles...");
   await setupInstructions();
-
   await setupManager(session);
   await setupReviewer(session);
   await setupEditor(session);
+  console.log("[INFO] All roles initialized");
+
+  showAttachInstructions();
 }
 
 async function setupInstructions() {
@@ -79,8 +84,8 @@ async function setupManager(session: string) {
   await sleep(3000);
 
   const prompt = `
-あなたはマネージャーロールです。
-@.ccteam/instructions/manager.md を読んで、自身の役割を理解してください。
+You are the Manager role.
+Please read @.ccteam/instructions/manager.md and understand your role.
 `.trim();
   await send({ session, role: "manager", message: prompt });
 }
@@ -90,8 +95,8 @@ async function setupReviewer(session: string) {
   await sleep(3000);
 
   const prompt = `
-あなたはレビュアーロールです。
-@.ccteam/instructions/reviewer.md を読んで、自身の役割を理解してください。
+You are the Reviewer role.
+Please read @.ccteam/instructions/reviewer.md and understand your role.
 `.trim();
   await send({ session, role: "reviewer", message: prompt });
 }
@@ -101,8 +106,16 @@ async function setupEditor(session: string) {
   await sleep(3000);
 
   const prompt = `
-あなたはワーカーロールです。
-@.ccteam/instructions/worker.md を読んで、自身の役割を理解してください。
+You are the Worker role.
+Please read @.ccteam/instructions/worker.md and understand your role.
 `.trim();
   await send({ session, role: "worker", message: prompt });
+}
+
+function showAttachInstructions() {
+  console.log("=".repeat(60));
+  console.log("  🎉 ccteam initialization completed!");
+  console.log("  To attach to the session, run the following command:");
+  console.log("    $ tmux attach-session -t ccteam");
+  console.log("=".repeat(60));
 }
