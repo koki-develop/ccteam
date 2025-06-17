@@ -5,22 +5,40 @@ import { start } from "./cmd/start";
 
 const program = new Command();
 
-program.command("start").action(async () => {
-  await start();
-});
+program
+  .name("ccteam")
+  .description(
+    "CLI tool to orchestrate multiple Claude Code instances in tmux sessions",
+  );
+
+program
+  .command("start")
+  .description(
+    "Initialize tmux session with 3 Claude Code instances (Manager/Reviewer/Worker)",
+  )
+  .action(async () => {
+    await start();
+  });
 
 program
   .command("send")
-  .argument("<role>", "The role to send the message to")
+  .description(
+    "Send message to specific role (for agents) - manager/reviewer/worker",
+  )
+  .argument("<role>", "The role to send message to (worker/reviewer/manager)")
   .argument("<message>", "The message to send")
   .action(async (role, message) => {
     await send({ role, message, session: "ccteam" });
   });
 
-program
+const messagesCmd = program
   .command("messages")
+  .description("Manage message files (for agent communication)");
+
+messagesCmd
   .command("delete")
-  .argument("<message>", "The message to delete")
+  .description("Delete processed message files (for agents)")
+  .argument("<message>", "The message file to delete")
   .action(async (message) => {
     await deleteMessage(message);
   });
