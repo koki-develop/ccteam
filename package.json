@@ -6,7 +6,8 @@
   "scripts": {
     "prepare": "husky",
     "fmt": "biome check --write --unsafe .",
-    "lint": "biome check ."
+    "lint": "biome check .",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "commander": "14.0.0"
