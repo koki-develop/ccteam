@@ -25,7 +25,7 @@ bun tsc --noEmit
 
 ### CLI Usage
 ```bash
-# Initialize tmux session with 3 Claude Code instances
+# Initialize tmux session with 3 Claude Code instances (generates unique session name)
 ccteam start
 
 # Send message to specific role (for agents only)
@@ -70,6 +70,11 @@ ccteam messages delete <message-file>
 - Check existence before file operations
 - Use Bun's text import syntax for markdown files: `import ... with { type: "text" }`
 
+**Session Management**:
+- Session names are dynamically generated as `ccteam-{5randomChars}`
+- Session name is persisted in `.ccteam/session` file
+- Use `loadSessionName()` from `lib/util.ts` to retrieve current session
+
 ### Technical Stack
 - **Runtime**: Bun v1.2.16 (direct TypeScript execution)
 - **Language**: TypeScript with ESNext target and strict mode
@@ -95,7 +100,7 @@ src/
 ├── instructions/        # Role-specific instruction documents
 ├── lib/                 # Shared utilities
 │   ├── tmux.ts          # tmux command wrapper
-│   └── util.ts          # General utilities (sleep, etc.)
+│   └── util.ts          # General utilities (sleep, session management, etc.)
 └── types/               # TypeScript type definitions
 ```
 
