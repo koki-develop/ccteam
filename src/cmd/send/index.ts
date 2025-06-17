@@ -10,7 +10,7 @@ export type SnedParams = {
 export async function send({ session, role, message }: SnedParams) {
   const roleMap: Record<string, number> = {
     manager: 0,
-    reviewer: 1,
+    leader: 1,
     worker: 2,
   };
   if (!Object.keys(roleMap).includes(role)) {

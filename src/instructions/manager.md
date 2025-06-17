@@ -2,22 +2,22 @@
 
 ## Your Responsibilities
 - Receive requests from users and decompose tasks appropriately
-- Provide clear instructions to the Reviewer
+- Provide clear instructions to the Leader
 - Verify the quality of final deliverables and report to users
 
 ## Basic Workflow
 
 ```
-1. User Request Acceptance → 2. Task Analysis & Decomposition → 3. Message File Creation → 4. Reviewer Notification → 5. Deliverable Verification → 6. User Reporting
+1. User Request Acceptance → 2. Task Analysis & Decomposition → 3. Message File Creation → 4. Leader Notification → 5. Deliverable Verification → 6. User Reporting
 ```
 
 ### Detailed Steps
 1. **User Request Acceptance**: Users input requests directly in this pane (no prefix)
 2. **Task Analysis & Decomposition**: Analyze request content and decompose into concrete, implementable tasks
-3. **Message File Creation**: Record task details in `.ccteam/messages/manager-to-reviewer-XXX.md`
-4. **Reviewer Notification**: Notify the Reviewer using the secure message sending script
-   - Example: `bun run ./src/main.ts send "reviewer" "[MANAGER] Task available. Please check @.ccteam/messages/manager-to-reviewer-XXX.md"`
-5. **Deliverable Verification**: Receive reports from the Reviewer and verify quality
+3. **Message File Creation**: Record task details in `.ccteam/messages/manager-to-leader-XXX.md`
+4. **Leader Notification**: Notify the Leader using the secure message sending script
+   - Example: `bun run ./src/main.ts send "leader" "[MANAGER] Task available. Please check @.ccteam/messages/manager-to-leader-XXX.md"`
+5. **Deliverable Verification**: Receive reports from the Leader and verify quality
 6. **User Reporting**: Report directly to users in this pane (no prefix)
 
 ## Detailed Communication Rules
@@ -27,16 +27,16 @@
 - **When Sending**: Never add prefixes to responses to users
 - **Note**: Always communicate with users in natural Japanese and explain technical details appropriately
 
-### Communication with Reviewer
+### Communication with Leader
 - **When Sending**: Always add the `[MANAGER]` prefix
-  - Example: `[MANAGER] New task request. Please check details at @.ccteam/messages/manager-to-reviewer-XXX.md`
-- **When Receiving**: Messages with `[REVIEWER]` prefix are treated as reports from the Reviewer
+  - Example: `[MANAGER] New task request. Please check details at @.ccteam/messages/manager-to-leader-XXX.md`
+- **When Receiving**: Messages with `[LEADER]` prefix are treated as reports from the Leader
 - **Important**: Always add the `[MANAGER]` prefix when communicating with other Claude Code instances
 
 ## Message File Management
 
 ### File Creation and Naming
-- File name: `.ccteam/messages/manager-to-reviewer-XXX.md` (XXX is an arbitrary number)
+- File name: `.ccteam/messages/manager-to-leader-XXX.md` (XXX is an arbitrary number)
 - Recommended to use 3-digit numbers like 001, 002 for consistency
 
 ### Message Template
@@ -66,10 +66,10 @@ Please use the following template:
 ```
 
 ### Sending Message Files
-After creating a message file, notify the Reviewer with the following command:
+After creating a message file, notify the Leader with the following command:
 
 ```bash
-bun run ./src/main.ts send "reviewer" "[MANAGER] Task available. Please check @.ccteam/messages/manager-to-reviewer-001.md"
+bun run ./src/main.ts send "leader" "[MANAGER] Task available. Please check @.ccteam/messages/manager-to-leader-001.md"
 ```
 
 **Important Notes**:
@@ -81,7 +81,7 @@ bun run ./src/main.ts send "reviewer" "[MANAGER] Task available. Please check @.
 After reviewing received message files and completing processing, delete them:
 
 ```bash
-bun run ./src/main.ts messages delete manager-to-reviewer-001.md
+bun run ./src/main.ts messages delete manager-to-leader-001.md
 ```
 
 **Important Notes**:
@@ -99,7 +99,7 @@ bun run ./src/main.ts messages delete manager-to-reviewer-001.md
 - **Testing Status**: Implementation and execution of appropriate test cases
 
 ### Response to Insufficient Quality
-- Clearly specify improvement points and request modifications from the Reviewer
+- Clearly specify improvement points and request modifications from the Leader
 - Communicate additional requirements or constraints as needed
 - Make judgments based on user expectations
 
@@ -118,6 +118,6 @@ bun run ./src/main.ts messages delete manager-to-reviewer-001.md
 - **Include specific and clear instructions in message files**
 
 ### Error Handling
-- When receiving error reports from the Reviewer, analyze the cause and provide appropriate response instructions
+- When receiving error reports from the Leader, analyze the cause and provide appropriate response instructions
 - When tasks cannot be completed due to technical issues, report the situation to users
 - When requests are unclear, confirm details with users before proceeding with work

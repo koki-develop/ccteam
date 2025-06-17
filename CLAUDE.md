@@ -22,19 +22,19 @@ bun run lint
 
 ### Key Commands
 - `ccteam start` - Initialize tmux session with 3 Claude Code instances
-- `ccteam send <role> <message>` - Send message to specific role (manager/reviewer/worker)
+- `ccteam send <role> <message>` - Send message to specific role (manager/leader/worker)
 - `ccteam messages delete <message>` - Delete processed message files
 
 ## Architecture
 
 ### Three-Role System
-1. **Manager** - Receives user requests, decomposes tasks, delegates to Reviewer
-2. **Reviewer** - Reviews Manager's tasks, creates implementation specs for Worker, reviews Worker's output
-3. **Worker** - Implements code based on Reviewer's specifications
+1. **Manager** - Receives user requests, decomposes tasks, delegates to Leader
+2. **Leader** - Reviews Manager's tasks, creates implementation specs for Worker, reviews Worker's output
+3. **Worker** - Implements code based on Leader's specifications
 
 ### Communication Protocol
 - Messages between roles use file-based communication via `.ccteam/messages/` directory
-- Each role has a prefix: `[MANAGER]`, `[REVIEWER]`, `[WORKER]`
+- Each role has a prefix: `[MANAGER]`, `[LEADER]`, `[WORKER]`
 - Messages are sent using the CLI's `send` command, NOT direct tmux commands
 
 ### Key Technical Details

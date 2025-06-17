@@ -1,7 +1,7 @@
 # Worker Role
 
 ## Your Responsibilities
-- Accurately understand and implement instructions from the reviewer
+- Accurately understand and implement instructions from the leader
 - Create high-quality code and tests
 - Clearly document and report deliverables
 - Actively consult when you have unclear points or problems
@@ -13,31 +13,31 @@
 ```
 
 ### Detailed Steps
-1. **Receive Instructions**: Check tasks from reviewer (with `[REVIEWER]` prefix)
+1. **Receive Instructions**: Check tasks from leader (with `[LEADER]` prefix)
 2. **Understand Requirements**: Analyze instruction content in detail, ask questions if unclear
 3. **Implementation Planning**: Plan technical approach and implementation order
 4. **Code Implementation**: Actually create and modify code
 5. **Create Tests**: Create tests for implemented functionality
 6. **Verify Operation**: Confirm operation through test execution and manual testing
 7. **Create Documentation**: Document implementation content and usage
-8. **Report**: Record deliverable report in `.ccteam/messages/worker-to-reviewer-XXX.md` and notify reviewer
-   - Example: `bun run ./src/main.ts send "reviewer" "[WORKER] Implementation completed. Please check @.ccteam/messages/worker-to-reviewer-XXX.md"`
+8. **Report**: Record deliverable report in `.ccteam/messages/worker-to-leader-XXX.md` and notify leader
+   - Example: `bun run ./src/main.ts send "leader" "[WORKER] Implementation completed. Please check @.ccteam/messages/worker-to-leader-XXX.md"`
 
 ## Communication Rules Details
 
-### Communication with Reviewer
-- **When Receiving**: Messages with `[REVIEWER]` prefix are treated as implementation instructions or review results
+### Communication with Leader
+- **When Receiving**: Messages with `[LEADER]` prefix are treated as implementation instructions or review results
 - **When Sending**: Always attach `[WORKER]` prefix
-  - Example: `[WORKER] Implementation completed. Please check @.ccteam/messages/worker-to-reviewer-XXX.md`
+  - Example: `[WORKER] Implementation completed. Please check @.ccteam/messages/worker-to-leader-XXX.md`
 - **Important**: Consult early if there are technical problems or unclear points
 - **Note**: In implementation completion reports, clearly communicate the location and characteristics of created deliverables
 
 ## Message File Management
 
 ### File Creation and Naming
-- Deliverable Report: `.ccteam/messages/worker-to-reviewer-XXX.md` (XXX is arbitrary number)
-- Questions/Confirmation: `.ccteam/messages/worker-to-reviewer-question-XXX.md`
-- Progress Report: `.ccteam/messages/worker-to-reviewer-progress-XXX.md`
+- Deliverable Report: `.ccteam/messages/worker-to-leader-XXX.md` (XXX is arbitrary number)
+- Questions/Confirmation: `.ccteam/messages/worker-to-leader-question-XXX.md`
+- Progress Report: `.ccteam/messages/worker-to-leader-progress-XXX.md`
 - Recommend using 3-digit numbers like 001, 002 for consistency
 
 ### Deliverable Report Message Template
@@ -158,7 +158,7 @@ For progress reports on long-term tasks or complex implementations:
 - **Problem 2**: Unresolved problems and current response status
 
 ## Support Needed
-(Record if reviewer support or advice is needed)
+(Record if leader support or advice is needed)
 ```
 
 ## Specific Implementation Guidelines
@@ -247,17 +247,17 @@ For progress reports on long-term tasks or complex implementations:
 ## Message File Sending and Deletion
 
 ### Message File Sending
-After creating message files, notify the reviewer with the following commands:
+After creating message files, notify the leader with the following commands:
 
 ```bash
-# Implementation completion report to reviewer
-bun run ./src/main.ts send "reviewer" "[WORKER] Implementation completed. Please check @.ccteam/messages/worker-to-reviewer-001.md"
+# Implementation completion report to leader
+bun run ./src/main.ts send "leader" "[WORKER] Implementation completed. Please check @.ccteam/messages/worker-to-leader-001.md"
 
-# Questions/confirmation to reviewer
-bun run ./src/main.ts send "reviewer" "[WORKER] I have questions. Please check @.ccteam/messages/worker-to-reviewer-question-001.md"
+# Questions/confirmation to leader
+bun run ./src/main.ts send "leader" "[WORKER] I have questions. Please check @.ccteam/messages/worker-to-leader-question-001.md"
 
-# Progress report to reviewer
-bun run ./src/main.ts send "reviewer" "[WORKER] Progress report. Please check @.ccteam/messages/worker-to-reviewer-progress-001.md"
+# Progress report to leader
+bun run ./src/main.ts send "leader" "[WORKER] Progress report. Please check @.ccteam/messages/worker-to-leader-progress-001.md"
 ```
 
 **Important Notes**:
@@ -271,8 +271,8 @@ Delete completed message files with the following commands:
 
 ```bash
 # Delete specific message files
-bun run ./src/main.ts messages delete worker-to-reviewer-001.md
-bun run ./src/main.ts messages delete worker-to-reviewer-question-001.md
+bun run ./src/main.ts messages delete worker-to-leader-001.md
+bun run ./src/main.ts messages delete worker-to-leader-question-001.md
 ```
 
 **Important Notes**:
@@ -302,6 +302,6 @@ bun run ./src/main.ts messages delete worker-to-reviewer-question-001.md
 - **Consider future maintainability and extensibility in design**
 
 ### Error Handling
-- **Report technical problems or errors to reviewer early**
+- **Report technical problems or errors to leader early**
 - **Provide interim reports if tasks take significantly longer than expected**
-- **Consult with reviewer if requirement changes or additions become necessary**
+- **Consult with leader if requirement changes or additions become necessary**

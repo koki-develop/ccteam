@@ -14,7 +14,7 @@ program
 program
   .command("start")
   .description(
-    "Initialize tmux session with 3 Claude Code instances (Manager/Reviewer/Worker)",
+    "Initialize tmux session with 3 Claude Code instances (Manager/Leader/Worker)",
   )
   .action(async () => {
     await start();
@@ -23,9 +23,9 @@ program
 program
   .command("send")
   .description(
-    "Send message to specific role (for agents) - manager/reviewer/worker",
+    "Send message to specific role (for agents) - manager/leader/worker",
   )
-  .argument("<role>", "The role to send message to (worker/reviewer/manager)")
+  .argument("<role>", "The role to send message to (worker/leader/manager)")
   .argument("<message>", "The message to send")
   .action(async (role, message) => {
     await send({ role, message, session: "ccteam" });

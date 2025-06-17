@@ -1,9 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
-import managerInstruction from "../../instructions/manager.md" with {
+import leaderInstruction from "../../instructions/leader.md" with {
   type: "text",
 };
-import reviewerInstruction from "../../instructions/reviewer.md" with {
+import managerInstruction from "../../instructions/manager.md" with {
   type: "text",
 };
 import workerInstruction from "../../instructions/worker.md" with {
@@ -57,7 +57,7 @@ export async function start() {
   console.log("[INFO] Setting up roles...");
   await setupInstructions();
   await setupManager(session);
-  await setupReviewer(session);
+  await setupLeader(session);
   await setupEditor(session);
   console.log("[INFO] All roles initialized");
 
@@ -71,11 +71,11 @@ async function setupInstructions() {
   }
 
   const managerInstructionPath = path.join(instructionsDir, "manager.md");
-  const reviewerInstructionPath = path.join(instructionsDir, "reviewer.md");
+  const leaderInstructionPath = path.join(instructionsDir, "leader.md");
   const workerInstructionPath = path.join(instructionsDir, "worker.md");
 
   fs.writeFileSync(managerInstructionPath, managerInstruction);
-  fs.writeFileSync(reviewerInstructionPath, reviewerInstruction);
+  fs.writeFileSync(leaderInstructionPath, leaderInstruction);
   fs.writeFileSync(workerInstructionPath, workerInstruction);
 }
 
@@ -90,15 +90,15 @@ Please read @.ccteam/instructions/manager.md and understand your role.
   await send({ session, role: "manager", message: prompt });
 }
 
-async function setupReviewer(session: string) {
-  await send({ session, role: "reviewer", message: "claude" });
+async function setupLeader(session: string) {
+  await send({ session, role: "leader", message: "claude" });
   await sleep(3000);
 
   const prompt = `
-You are the Reviewer role.
-Please read @.ccteam/instructions/reviewer.md and understand your role.
+You are the Leader role.
+Please read @.ccteam/instructions/leader.md and understand your role.
 `.trim();
-  await send({ session, role: "reviewer", message: prompt });
+  await send({ session, role: "leader", message: prompt });
 }
 
 async function setupEditor(session: string) {
