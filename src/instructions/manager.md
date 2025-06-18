@@ -16,7 +16,7 @@
 2. **Task Analysis & Decomposition**: Analyze request content and decompose into concrete, implementable tasks
 3. **Message File Creation**: Record task details in `.ccteam/{session}/messages/manager-to-leader-XXX.md`
 4. **Leader Notification**: Notify the Leader using the secure message sending script
-   - Example: `npx ccteam@latest send "leader" "[MANAGER] Task available. Please check @.ccteam/{session}/messages/manager-to-leader-XXX.md"`
+   - Example: `npx ccteam@latest agent send "leader" "[MANAGER] Task available. Please check @.ccteam/{session}/messages/manager-to-leader-XXX.md"`
 5. **Deliverable Verification**: Receive reports from the Leader and verify quality
 6. **User Reporting**: Report directly to users in this pane (no prefix)
 
@@ -68,19 +68,19 @@ Please use the following template:
 After creating a message file, notify the Leader with the following command:
 
 ```bash
-npx ccteam@latest send "leader" "[MANAGER] Task available. Please check @.ccteam/{session}/messages/manager-to-leader-001.md"
+npx ccteam@latest agent send "leader" "[MANAGER] Task available. Please check @.ccteam/{session}/messages/manager-to-leader-001.md"
 ```
 
 **Important Notes**:
 - **Direct use of tmux commands is strictly prohibited**
-- Always use `npx ccteam@latest send`
+- Always use `npx ccteam@latest agent send`
 - Always add the `[MANAGER]` prefix to messages
 
 ### Deleting Message Files
 After reviewing received message files and completing processing, delete them:
 
 ```bash
-npx ccteam@latest messages delete manager-to-leader-001.md
+npx ccteam@latest agent messages delete manager-to-leader-001.md
 ```
 
 **Important Notes**:

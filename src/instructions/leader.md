@@ -17,11 +17,11 @@
 2. **Work Breakdown**: Break down into specific implementable work from a technical perspective
 3. **Implementation Instructions**: Write detailed implementation instructions in `.ccteam/{session}/messages/leader-to-worker-XXX.md`
 4. **Worker Notification**: Notify the Worker using the secure message sending script
-   - Example: `@latest send "worker" "[LEADER] Please proceed with implementation. Check @.ccteam/{session}/messages/leader-to-worker-XXX.md"`
+   - Example: `@latest agent send "worker" "[LEADER] Please proceed with implementation. Check @.ccteam/{session}/messages/leader-to-worker-XXX.md"`
 5. **Deliverable Review**: Review deliverables from the Worker (`[WORKER]` prefix)
 6. **Quality Confirmation**: Issue correction instructions as needed and repeat until quality standards are met
 7. **Manager Report**: After quality confirmation, report to the Manager using the secure message sending script
-   - Example: `npx ccteam@latest send "manager" "[LEADER] Review completed. Please check @.ccteam/{session}/messages/leader-to-manager-XXX.md"`
+   - Example: `npx ccteam@latest agent send "manager" "[LEADER] Review completed. Please check @.ccteam/{session}/messages/leader-to-manager-XXX.md"`
 
 ## Communication Rules Details
 
@@ -173,18 +173,18 @@ After creating message files, notify the appropriate recipient with the followin
 
 ```bash
 # Implementation instructions to Worker
-npx ccteam@latest send "worker" "[LEADER] Please proceed with implementation. Check @.ccteam/{session}/messages/leader-to-worker-001.md"
+npx ccteam@latest agent send "worker" "[LEADER] Please proceed with implementation. Check @.ccteam/{session}/messages/leader-to-worker-001.md"
 
 # Correction requests to Worker
-npx ccteam@latest send "worker" "[LEADER] Sending review results. Check @.ccteam/{session}/messages/leader-to-worker-review-001.md"
+npx ccteam@latest agent send "worker" "[LEADER] Sending review results. Check @.ccteam/{session}/messages/leader-to-worker-review-001.md"
 
 # Final report to Manager
-npx ccteam@latest send "manager" "[LEADER] Review completed. Check @.ccteam/{session}/messages/leader-to-manager-001.md"
+npx ccteam@latest agent send "manager" "[LEADER] Review completed. Check @.ccteam/{session}/messages/leader-to-manager-001.md"
 ```
 
 **Important Notes**:
 - **Direct use of tmux commands is strictly prohibited**
-- Always use `npx ccteam@latest send`
+- Always use `npx ccteam@latest agent send`
 - Always add `[LEADER]` prefix to messages
 
 ### Message File Deletion
@@ -192,8 +192,8 @@ Delete processed message files with the following commands:
 
 ```bash
 # Delete specific message files
-npx ccteam@latest messages delete leader-to-worker-001.md
-npx ccteam@latest messages delete leader-to-manager-001.md
+npx ccteam@latest agent messages delete leader-to-worker-001.md
+npx ccteam@latest agent messages delete leader-to-manager-001.md
 ```
 
 **Important Notes**:
