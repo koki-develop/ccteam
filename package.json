@@ -2,13 +2,25 @@
   "name": "ccteam",
   "module": "src/main.ts",
   "type": "module",
-  "private": true,
+  "version": "0.0.1",
+  "author": "koki-develop <kou.pg.0131@gmail.com>",
+  "homepage": "https://github.com/koki-develop/claude-code-team",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koki-develop/claude-code-team.git"
+  },
+  "license": "MIT",
+  "bin": {
+    "ccteam": "dist/index.js"
+  },
+  "files": ["dist"],
   "scripts": {
     "prepare": "husky",
     "fmt": "biome check --write --unsafe .",
     "lint": "biome check .",
     "typecheck": "tsc --noEmit",
-    "build": "bun run scripts/build.ts"
+    "build": "bun run scripts/build.ts",
+    "prepublishOnly": "bun run build"
   },
   "dependencies": {
     "commander": "14.0.0"
