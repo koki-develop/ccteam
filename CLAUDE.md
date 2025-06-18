@@ -19,7 +19,7 @@ bun run build
 # Format code with Biome
 bun run fmt
 
-# Lint code with Biome
+# Lint code with Biome (also checks formatting)
 bun run lint
 
 # Type check
@@ -31,6 +31,9 @@ bun test
 # Run specific test file
 bun test src/lib/config.spec.ts
 ```
+
+### Git Hooks
+Pre-commit hooks automatically run Biome formatting/linting via Husky and lint-staged. This ensures code quality before commits.
 
 ### CLI Usage
 ```bash
@@ -116,7 +119,7 @@ The `start` command supports flags to override configuration file settings:
 - Multiple sessions can run simultaneously without interference
 
 ### Technical Stack
-- **Runtime**: Bun v1.2.16 (direct TypeScript execution)
+- **Runtime**: Bun (direct TypeScript execution)
 - **Language**: TypeScript with ESNext target and strict mode
 - **Module Resolution**: Bundler mode with `.ts` import extensions allowed
 - **Code Quality**: Biome for formatting/linting with pre-commit hooks
@@ -124,6 +127,7 @@ The `start` command supports flags to override configuration file settings:
 - **Build Process**: Bun.build API with external packages and node target
 - **Release Management**: Release Please for automated releases
 - **Testing Framework**: Bun's built-in test runner with `.spec.ts` files
+- **CI/CD**: GitHub Actions with lint and build jobs
 
 ### Important Constraints
 - Never use `tmux send-keys` directly - always use `bun run ./src/main.ts agent send` or `npx ccteam@latest agent send`
@@ -154,3 +158,5 @@ src/
 - Session-specific directories (`.ccteam/<session_name>/`) are created at runtime in the working directory
 - Build process creates a single bundled file at `dist/main.js` with external dependencies
 - Test files should use `*.spec.ts` naming convention and be placed alongside implementation files
+- Bun dependencies are installed with exact versions (configured in `bunfig.toml`)
+- When publishing to npm, the build runs automatically via `prepublishOnly` hook
