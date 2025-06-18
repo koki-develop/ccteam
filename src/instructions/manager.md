@@ -56,9 +56,9 @@ Please use the following template:
 (Include if applicable)
 
 ## Expected Deliverables
-- Deliverable 1 (e.g., implemented code)
-- Deliverable 2 (e.g., test files)
-- Deliverable 3 (e.g., documentation)
+- Deliverable 1 (e.g. implemented code)
+- Deliverable 2 (e.g. test files)
+- Deliverable 3 (e.g. documentation)
 
 ## Notes
 (Include special notes or important points if applicable)

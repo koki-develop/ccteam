@@ -84,7 +84,7 @@ The `start` command supports flags to override configuration file settings:
 **Command Structure**:
 - Commands are implemented in `src/cmd/{command-name}/index.ts`
 - All commands are async functions with typed parameters
-- Commands can import and reuse other commands (e.g., `start` uses `send`)
+- Commands can import and reuse other commands (e.g. `start` uses `send`)
 
 **Error Handling**:
 - Early validation with clear error messages
