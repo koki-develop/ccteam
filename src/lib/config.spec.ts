@@ -19,18 +19,7 @@ describe("config", () => {
   });
 
   describe("loadConfig", () => {
-    it("should return default config when config file does not exist", async () => {
-      const config = await loadConfig();
-      expect(config).toEqual({
-        roles: {
-          manager: { skipPermissions: false },
-          leader: { skipPermissions: false },
-          worker: { skipPermissions: false },
-        },
-      });
-    });
-
-    it("should load valid YAML config file correctly", async () => {
+    it("should load valid YAML config file correctly", () => {
       const configPath = path.join(TEST_CONFIG_DIR, "valid-config.yml");
       const configContent = `
 roles:
@@ -46,7 +35,7 @@ roles:
 `;
       fs.writeFileSync(configPath, configContent);
 
-      const config = await loadConfig(configPath);
+      const config = loadConfig(configPath);
       expect(config).toEqual({
         roles: {
           manager: { model: "haiku", skipPermissions: true },
@@ -56,7 +45,7 @@ roles:
       });
     });
 
-    it("should apply default values for partial config file", async () => {
+    it("should apply default values for partial config file", () => {
       const configPath = path.join(TEST_CONFIG_DIR, "partial-config.yml");
       const configContent = `
 roles:
@@ -67,7 +56,7 @@ roles:
 `;
       fs.writeFileSync(configPath, configContent);
 
-      const config = await loadConfig(configPath);
+      const config = loadConfig(configPath);
       expect(config).toEqual({
         roles: {
           manager: { model: "haiku", skipPermissions: false },
@@ -77,14 +66,14 @@ roles:
       });
     });
 
-    it("should throw error when specified config file does not exist", async () => {
+    it("should throw error when specified config file does not exist", () => {
       const configPath = path.join(TEST_CONFIG_DIR, "non-existent.yml");
-      return expect(loadConfig(configPath)).rejects.toThrow(
+      expect(() => loadConfig(configPath)).toThrow(
         "Configuration file not found",
       );
     });
 
-    it("should throw error for invalid YAML syntax", async () => {
+    it("should throw error for invalid YAML syntax", () => {
       const configPath = path.join(TEST_CONFIG_DIR, "invalid-syntax.yml");
       const configContent = `
 roles:
@@ -101,10 +90,10 @@ roles:
 `;
       fs.writeFileSync(configPath, configContent);
 
-      return expect(loadConfig(configPath)).rejects.toThrow();
+      expect(() => loadConfig(configPath)).toThrow();
     });
 
-    it("should throw error for invalid schema", async () => {
+    it("should throw error for invalid schema", () => {
       const configPath = path.join(TEST_CONFIG_DIR, "invalid-schema.yml");
       const configContent = `
 roles:
@@ -117,10 +106,10 @@ roles:
 `;
       fs.writeFileSync(configPath, configContent);
 
-      return expect(loadConfig(configPath)).rejects.toThrow();
+      expect(() => loadConfig(configPath)).toThrow();
     });
 
-    it("should support both absolute and relative paths", async () => {
+    it("should support both absolute and relative paths", () => {
       const relativeConfigPath = path.join("tmp", "relative-config.yml");
       const absoluteConfigPath = path.join(
         TEST_CONFIG_DIR,
@@ -144,8 +133,8 @@ roles:
       );
       fs.writeFileSync(absoluteConfigPath, configContent);
 
-      const relativeConfig = await loadConfig(relativeConfigPath);
-      const absoluteConfig = await loadConfig(absoluteConfigPath);
+      const relativeConfig = loadConfig(relativeConfigPath);
+      const absoluteConfig = loadConfig(absoluteConfigPath);
 
       expect(relativeConfig).toEqual(absoluteConfig);
       expect(relativeConfig.roles.manager.model).toBe("haiku");

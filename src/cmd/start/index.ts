@@ -34,7 +34,7 @@ export async function start(configPath?: string) {
   if (configPath && configPath !== "ccteam.yml") {
     console.log(`[INFO] Using config file: ${configPath}`);
   }
-  const config = await loadConfig(configPath);
+  const config = _loadConfig(configPath);
 
   const session = generateSessionName();
   await tmux(
@@ -149,4 +149,25 @@ function showAttachInstructions(session: string) {
   console.log("  To attach to the session, run the following command:");
   console.log(`    $ tmux attach-session -t ${session}`);
   console.log("=".repeat(60));
+}
+
+function _loadConfig(configPath?: string): Config {
+  const targetPath = (() => {
+    if (configPath) {
+      return path.resolve(process.cwd(), configPath);
+    }
+    return path.resolve(process.cwd(), "ccteam.yml");
+  })();
+
+  if (!configPath && !fs.existsSync(targetPath)) {
+    return {
+      roles: {
+        manager: { skipPermissions: false },
+        leader: { skipPermissions: false },
+        worker: { skipPermissions: false },
+      },
+    };
+  }
+
+  return loadConfig(targetPath);
 }
