@@ -114,7 +114,7 @@ Please read @.ccteam/instructions/worker.md and understand your role.
 
 function showAttachInstructions(session: string) {
   console.log("=".repeat(60));
-  console.log("  🎉 ccteam initialization completed!");
+  console.log("  🎉 Claude Code Team initialization completed!");
   console.log("  To attach to the session, run the following command:");
   console.log(`    $ tmux attach-session -t ${session}`);
   console.log("=".repeat(60));
