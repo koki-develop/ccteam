@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.0](https://github.com/koki-develop/claude-code-team/compare/v0.1.1...v0.2.0) (2025-06-18)
+
+
+### Features
+
+* add --version flag to CLI ([8b20977](https://github.com/koki-develop/claude-code-team/commit/8b20977b4290029da3fc509c59c9e9fb25d0bbd9))
+
+
+### Bug Fixes
+
+* Fix instruction path ([f789c85](https://github.com/koki-develop/claude-code-team/commit/f789c858f425191fbe9affc436d14d1de9a5d300))
+
 ## [0.1.1](https://github.com/koki-develop/claude-code-team/compare/v0.1.0...v0.1.1) (2025-06-18)
 
 
