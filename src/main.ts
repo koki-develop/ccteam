@@ -61,7 +61,11 @@ program
     await init(options.config);
   });
 
-program
+const agentCommand = program
+  .command("agent")
+  .description("Agent commands for Claude Code instances");
+
+agentCommand
   .command("send")
   .description(
     "Send message to specific role (for agents) - manager/leader/worker",
@@ -73,7 +77,7 @@ program
     await send({ role, message, session });
   });
 
-const messagesCmd = program
+const messagesCmd = agentCommand
   .command("messages")
   .description("Manage message files (for agent communication)");
 
