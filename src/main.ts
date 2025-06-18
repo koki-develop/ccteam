@@ -1,10 +1,9 @@
 import { Command } from "commander";
 import packageJson from "../package.json" with { type: "json" };
-import { init } from "./cmd/init";
-import { deleteMessage } from "./cmd/messages";
-import { send } from "./cmd/send";
-import { start } from "./cmd/start";
-import { loadSessionName } from "./lib/util";
+import { deleteMessageCommand } from "./cmd/agent/messages";
+import { sendCommand } from "./cmd/agent/send";
+import { initCommand } from "./cmd/init";
+import { startCommand } from "./cmd/start";
 
 const program = new Command();
 
@@ -46,7 +45,7 @@ program
     "Skip permission prompts for Worker role's Claude Code instance",
   )
   .action(async (options) => {
-    await start(options);
+    await startCommand(options);
   });
 
 program
@@ -58,7 +57,7 @@ program
     "ccteam.yml",
   )
   .action(async (options) => {
-    await init(options.config);
+    await initCommand(options.config);
   });
 
 const agentCommand = program
@@ -73,8 +72,7 @@ agentCommand
   .argument("<role>", "The role to send message to (worker/leader/manager)")
   .argument("<message>", "The message to send")
   .action(async (role, message) => {
-    const session = await loadSessionName();
-    await send({ role, message, session });
+    await sendCommand(role, message);
   });
 
 const messagesCmd = agentCommand
@@ -86,7 +84,7 @@ messagesCmd
   .description("Delete processed message files (for agents)")
   .argument("<message>", "The message file to delete")
   .action(async (message) => {
-    await deleteMessage(message);
+    await deleteMessageCommand(message);
   });
 
 program.parse(process.argv);

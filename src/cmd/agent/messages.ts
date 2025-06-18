@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { getMessagesPath } from "../../lib/util";
 
-export async function deleteMessage(message: string) {
+export async function deleteMessageCommand(message: string) {
   const messageDir = await getMessagesPath();
   if (!fs.existsSync(messageDir)) {
     fs.mkdirSync(messageDir, { recursive: true });

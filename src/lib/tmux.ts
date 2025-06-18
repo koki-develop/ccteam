@@ -1,4 +1,5 @@
 import { spawn } from "node:child_process";
+import { sleep } from "./util";
 
 export function tmux(...args: string[]): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -22,4 +23,26 @@ export function tmux(...args: string[]): Promise<string> {
       stderr += data;
     });
   });
+}
+
+export type SendParams = {
+  session: string;
+  role: string;
+  message: string;
+};
+
+export async function send({ session, role, message }: SendParams) {
+  const roleMap: Record<string, number> = {
+    manager: 0,
+    leader: 1,
+    worker: 2,
+  };
+  if (!Object.keys(roleMap).includes(role)) {
+    throw new Error(`Invalid role: ${role}`);
+  }
+
+  const target = `${session}:0.${roleMap[role]}`;
+  await tmux("send-keys", "-t", target, message);
+  await sleep(1000);
+  await tmux("send-keys", "-t", target, "C-m");
 }
