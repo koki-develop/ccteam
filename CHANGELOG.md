@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/koki-develop/claude-code-team/compare/v0.1.0...v0.1.1) (2025-06-18)
+
+
+### Bug Fixes
+
+* Fix instructions ([fbdeb15](https://github.com/koki-develop/claude-code-team/commit/fbdeb15aabc6f3b5bf8518d9e110c11295fa1781))
+
 ## [0.1.0](https://github.com/koki-develop/claude-code-team/compare/v0.0.5...v0.1.0) (2025-06-18)
 
 
