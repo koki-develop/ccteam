@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.3](https://github.com/koki-develop/claude-code-team/compare/v0.0.2...v0.0.3) (2025-06-18)
+
+
+### Bug Fixes
+
+* Fix build script ([c43e826](https://github.com/koki-develop/claude-code-team/commit/c43e8263a9b502417f753bed35e848fa6c474663))
+
 ## 0.0.2 (2025-06-18)
 
 
