@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.0](https://github.com/koki-develop/claude-code-team/compare/v0.0.5...v0.1.0) (2025-06-18)
+
+
+### Features
+
+* implement session-based message directory separation ([1bf9863](https://github.com/koki-develop/claude-code-team/commit/1bf986326298d4fa8f5f98dc2eb805305893b20c))
+
 ## [0.0.5](https://github.com/koki-develop/claude-code-team/compare/v0.0.4...v0.0.5) (2025-06-18)
 
 
