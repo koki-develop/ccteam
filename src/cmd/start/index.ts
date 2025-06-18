@@ -88,7 +88,7 @@ export async function start(options: StartOptions) {
   await setupInstructions(session);
   await setupManager(session, config);
   await setupLeader(session, config);
-  await setupEditor(session, config);
+  await setupWorker(session, config);
   console.log("[INFO] All roles initialized");
 
   showAttachInstructions(session);
@@ -140,7 +140,7 @@ Please read @.ccteam/${session}/instructions/leader.md and understand your role.
   await send({ session, role: "leader", message: prompt });
 }
 
-async function setupEditor(session: string, config: Config) {
+async function setupWorker(session: string, config: Config) {
   const command = buildClaudeCommand(config.roles.worker);
   await send({ session, role: "worker", message: command.join(" ") });
   await sleep(3000);
