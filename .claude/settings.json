@@ -1,6 +1,11 @@
 {
   "permissions": {
-    "allow": ["Bash(bun run ./src/main.ts:*)"],
+    "allow": [
+      "Bash(bun run ./src/main.ts:*)",
+      "Bash(bun run fmt:*)",
+      "Bash(bun run lint:*)",
+      "Bash(bun run typecheck:*)"
+    ],
     "deny": []
   }
 }
