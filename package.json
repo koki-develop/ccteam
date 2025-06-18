@@ -13,9 +13,7 @@
   "bin": {
     "ccteam": "dist/main.js"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "prepare": "husky",
     "fmt": "biome check --write --unsafe .",
