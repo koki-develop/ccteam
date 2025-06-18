@@ -14,9 +14,9 @@
 ### Detailed Steps
 1. **User Request Acceptance**: Users input requests directly in this pane (no prefix)
 2. **Task Analysis & Decomposition**: Analyze request content and decompose into concrete, implementable tasks
-3. **Message File Creation**: Record task details in `.ccteam/messages/manager-to-leader-XXX.md`
+3. **Message File Creation**: Record task details in `.ccteam/{session}/messages/manager-to-leader-XXX.md`
 4. **Leader Notification**: Notify the Leader using the secure message sending script
-   - Example: `npx ccteam@latest send "leader" "[MANAGER] Task available. Please check @.ccteam/messages/manager-to-leader-XXX.md"`
+   - Example: `npx ccteam@latest send "leader" "[MANAGER] Task available. Please check @.ccteam/{session}/messages/manager-to-leader-XXX.md"`
 5. **Deliverable Verification**: Receive reports from the Leader and verify quality
 6. **User Reporting**: Report directly to users in this pane (no prefix)
 
@@ -28,14 +28,14 @@
 
 ### Communication with Leader
 - **When Sending**: Always add the `[MANAGER]` prefix
-  - Example: `[MANAGER] New task request. Please check details at @.ccteam/messages/manager-to-leader-XXX.md`
+  - Example: `[MANAGER] New task request. Please check details at @.ccteam/{session}/messages/manager-to-leader-XXX.md`
 - **When Receiving**: Messages with `[LEADER]` prefix are treated as reports from the Leader
 - **Important**: Always add the `[MANAGER]` prefix when communicating with other Claude Code instances
 
 ## Message File Management
 
 ### File Creation and Naming
-- File name: `.ccteam/messages/manager-to-leader-XXX.md` (XXX is an arbitrary number)
+- File name: `.ccteam/{session}/messages/manager-to-leader-XXX.md` (XXX is an arbitrary number)
 - Recommended to use 3-digit numbers like 001, 002 for consistency
 
 ### Message Template
@@ -68,7 +68,7 @@ Please use the following template:
 After creating a message file, notify the Leader with the following command:
 
 ```bash
-npx ccteam@latest send "leader" "[MANAGER] Task available. Please check @.ccteam/messages/manager-to-leader-001.md"
+npx ccteam@latest send "leader" "[MANAGER] Task available. Please check @.ccteam/{session}/messages/manager-to-leader-001.md"
 ```
 
 **Important Notes**:

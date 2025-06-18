@@ -89,7 +89,8 @@ async function setupManager(session: string) {
 
   const prompt = `
 You are the Manager role.
-Please read @.ccteam/instructions/manager.md and understand your role.
+Session name: ${session}
+Please read @.ccteam/${session}/instructions/manager.md and understand your role.
 `.trim();
   await send({ session, role: "manager", message: prompt });
 }
@@ -100,7 +101,8 @@ async function setupLeader(session: string) {
 
   const prompt = `
 You are the Leader role.
-Please read @.ccteam/instructions/leader.md and understand your role.
+Session name: ${session}
+Please read @.ccteam/${session}/instructions/leader.md and understand your role.
 `.trim();
   await send({ session, role: "leader", message: prompt });
 }
@@ -111,7 +113,8 @@ async function setupEditor(session: string) {
 
   const prompt = `
 You are the Worker role.
-Please read @.ccteam/instructions/worker.md and understand your role.
+Session name: ${session}
+Please read @.ccteam/${session}/instructions/worker.md and understand your role.
 `.trim();
   await send({ session, role: "worker", message: prompt });
 }

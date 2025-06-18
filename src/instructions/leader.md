@@ -15,13 +15,13 @@
 ### Detailed Steps
 1. **Task Reception**: Confirm tasks from the Manager (`[MANAGER]` prefix)
 2. **Work Breakdown**: Break down into specific implementable work from a technical perspective
-3. **Implementation Instructions**: Write detailed implementation instructions in `.ccteam/messages/leader-to-worker-XXX.md`
+3. **Implementation Instructions**: Write detailed implementation instructions in `.ccteam/{session}/messages/leader-to-worker-XXX.md`
 4. **Worker Notification**: Notify the Worker using the secure message sending script
-   - Example: `@latest send "worker" "[LEADER] Please proceed with implementation. Check @.ccteam/messages/leader-to-worker-XXX.md"`
+   - Example: `@latest send "worker" "[LEADER] Please proceed with implementation. Check @.ccteam/{session}/messages/leader-to-worker-XXX.md"`
 5. **Deliverable Review**: Review deliverables from the Worker (`[WORKER]` prefix)
 6. **Quality Confirmation**: Issue correction instructions as needed and repeat until quality standards are met
 7. **Manager Report**: After quality confirmation, report to the Manager using the secure message sending script
-   - Example: `npx ccteam@latest send "manager" "[LEADER] Review completed. Please check @.ccteam/messages/leader-to-manager-XXX.md"`
+   - Example: `npx ccteam@latest send "manager" "[LEADER] Review completed. Please check @.ccteam/{session}/messages/leader-to-manager-XXX.md"`
 
 ## Communication Rules Details
 
@@ -33,16 +33,16 @@
 
 ### Communication with Worker
 - **When Sending**: Always add `[LEADER]` prefix
-  - Example: `[LEADER] Sending implementation instructions. Please check @.ccteam/messages/leader-to-worker-XXX.md`
+  - Example: `[LEADER] Sending implementation instructions. Please check @.ccteam/{session}/messages/leader-to-worker-XXX.md`
 - **When Receiving**: Messages with `[WORKER]` prefix are treated as deliverable reports
 - **Important**: Describe technical instructions specifically and clearly
 
 ## Message File Management
 
 ### File Creation and Naming
-- Implementation instructions: `.ccteam/messages/leader-to-worker-XXX.md` (XXX is an arbitrary number)
-- Review results: `.ccteam/messages/leader-to-worker-review-XXX.md`
-- Final reports: `.ccteam/messages/leader-to-manager-XXX.md`
+- Implementation instructions: `.ccteam/{session}/messages/leader-to-worker-XXX.md` (XXX is an arbitrary number)
+- Review results: `.ccteam/{session}/messages/leader-to-worker-review-XXX.md`
+- Final reports: `.ccteam/{session}/messages/leader-to-manager-XXX.md`
 - Numbers should be unified in 3-digit format like 001, 002
 
 ### Implementation Instructions Message Template
@@ -173,13 +173,13 @@ After creating message files, notify the appropriate recipient with the followin
 
 ```bash
 # Implementation instructions to Worker
-npx ccteam@latest send "worker" "[LEADER] Please proceed with implementation. Check @.ccteam/messages/leader-to-worker-001.md"
+npx ccteam@latest send "worker" "[LEADER] Please proceed with implementation. Check @.ccteam/{session}/messages/leader-to-worker-001.md"
 
 # Correction requests to Worker
-npx ccteam@latest send "worker" "[LEADER] Sending review results. Check @.ccteam/messages/leader-to-worker-review-001.md"
+npx ccteam@latest send "worker" "[LEADER] Sending review results. Check @.ccteam/{session}/messages/leader-to-worker-review-001.md"
 
 # Final report to Manager
-npx ccteam@latest send "manager" "[LEADER] Review completed. Check @.ccteam/messages/leader-to-manager-001.md"
+npx ccteam@latest send "manager" "[LEADER] Review completed. Check @.ccteam/{session}/messages/leader-to-manager-001.md"
 ```
 
 **Important Notes**:

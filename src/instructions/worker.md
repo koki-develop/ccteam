@@ -20,24 +20,24 @@
 5. **Create Tests**: Create tests for implemented functionality
 6. **Verify Operation**: Confirm operation through test execution and manual testing
 7. **Create Documentation**: Document implementation content and usage
-8. **Report**: Record deliverable report in `.ccteam/messages/worker-to-leader-XXX.md` and notify leader
-   - Example: `npx ccteam@latest send "leader" "[WORKER] Implementation completed. Please check @.ccteam/messages/worker-to-leader-XXX.md"`
+8. **Report**: Record deliverable report in `.ccteam/{session}/messages/worker-to-leader-XXX.md` and notify leader
+   - Example: `npx ccteam@latest send "leader" "[WORKER] Implementation completed. Please check @.ccteam/{session}/messages/worker-to-leader-XXX.md"`
 
 ## Communication Rules Details
 
 ### Communication with Leader
 - **When Receiving**: Messages with `[LEADER]` prefix are treated as implementation instructions or review results
 - **When Sending**: Always attach `[WORKER]` prefix
-  - Example: `[WORKER] Implementation completed. Please check @.ccteam/messages/worker-to-leader-XXX.md`
+  - Example: `[WORKER] Implementation completed. Please check @.ccteam/{session}/messages/worker-to-leader-XXX.md`
 - **Important**: Consult early if there are technical problems or unclear points
 - **Note**: In implementation completion reports, clearly communicate the location and characteristics of created deliverables
 
 ## Message File Management
 
 ### File Creation and Naming
-- Deliverable Report: `.ccteam/messages/worker-to-leader-XXX.md` (XXX is arbitrary number)
-- Questions/Confirmation: `.ccteam/messages/worker-to-leader-question-XXX.md`
-- Progress Report: `.ccteam/messages/worker-to-leader-progress-XXX.md`
+- Deliverable Report: `.ccteam/{session}/messages/worker-to-leader-XXX.md` (XXX is arbitrary number)
+- Questions/Confirmation: `.ccteam/{session}/messages/worker-to-leader-question-XXX.md`
+- Progress Report: `.ccteam/{session}/messages/worker-to-leader-progress-XXX.md`
 - Recommend using 3-digit numbers like 001, 002 for consistency
 
 ### Deliverable Report Message Template
@@ -251,13 +251,13 @@ After creating message files, notify the leader with the following commands:
 
 ```bash
 # Implementation completion report to leader
-npx ccteam@latest send "leader" "[WORKER] Implementation completed. Please check @.ccteam/messages/worker-to-leader-001.md"
+npx ccteam@latest send "leader" "[WORKER] Implementation completed. Please check @.ccteam/{session}/messages/worker-to-leader-001.md"
 
 # Questions/confirmation to leader
-npx ccteam@latest send "leader" "[WORKER] I have questions. Please check @.ccteam/messages/worker-to-leader-question-001.md"
+npx ccteam@latest send "leader" "[WORKER] I have questions. Please check @.ccteam/{session}/messages/worker-to-leader-question-001.md"
 
 # Progress report to leader
-npx ccteam@latest send "leader" "[WORKER] Progress report. Please check @.ccteam/messages/worker-to-leader-progress-001.md"
+npx ccteam@latest send "leader" "[WORKER] Progress report. Please check @.ccteam/{session}/messages/worker-to-leader-progress-001.md"
 ```
 
 **Important Notes**:
