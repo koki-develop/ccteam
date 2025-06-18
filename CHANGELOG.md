@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.4](https://github.com/koki-develop/claude-code-team/compare/v0.0.3...v0.0.4) (2025-06-18)
+
+
+### Bug Fixes
+
+* bun run ./src/main.ts -&gt; npx ccteam@latest ([e3a4f2d](https://github.com/koki-develop/claude-code-team/commit/e3a4f2d25ed3e850b238b20f7fe23d123cbb3ed6))
+* Fix load session name ([325b6ec](https://github.com/koki-develop/claude-code-team/commit/325b6ec20d00f61e69c6f50b5fc8401bdbd881be))
+
 ## [0.0.3](https://github.com/koki-develop/claude-code-team/compare/v0.0.2...v0.0.3) (2025-06-18)
 
 
