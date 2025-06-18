@@ -25,7 +25,55 @@ For installation instructions, please refer to the following link:
 
 ## Getting Started
 
-### 1. **Start a new team session:**
+### 1. **Initialize configuration (optional):**
+
+Create a configuration file to customize your team's behavior:
+
+```console
+$ npx ccteam@latest init
+```
+
+This creates a `ccteam.yml` file where you can specify Claude models and settings for each role.
+
+```yaml
+# ccteam.yml
+
+roles:
+  # Manager role configuration
+  # The Manager receives user requests, decomposes tasks, and coordinates with the Leader
+  manager:
+    # Claude model to use for this role (optional)
+    # e.g. "opus", "sonnet", "claude-sonnet-4-20250514"
+    model: ""
+
+    # Skip permission prompts when using Claude Code (default: false)
+    # Set to true to automatically accept all tool usage permissions
+    skipPermissions: false
+
+  # Leader role configuration
+  # The Leader reviews Manager's tasks, creates implementation specs, and reviews Worker's output
+  leader:
+    # Claude model to use for this role (optional)
+    # e.g. "opus", "sonnet", "claude-sonnet-4-20250514"
+    model: ""
+
+    # Skip permission prompts when using Claude Code (default: false)
+    # Set to true to automatically accept all tool usage permissions
+    skipPermissions: false
+
+  # Worker role configuration
+  # The Worker implements code based on Leader's specifications
+  worker:
+    # Claude model to use for this role (optional)
+    # e.g. "opus", "sonnet", "claude-sonnet-4-20250514"
+    model: ""
+
+    # Skip permission prompts when using Claude Code (default: false)
+    # Set to true to automatically accept all tool usage permissions
+    skipPermissions: false
+```
+
+### 2. **Start a new team session:**
 
 Run the following command to start Claude Code Team:
 
@@ -33,7 +81,7 @@ Run the following command to start Claude Code Team:
 $ npx ccteam@latest start
 ```
 
-### 2. **Connect to your AI team:**
+### 3. **Connect to your AI team:**
 
 When Claude Code Team starts up, it will output the tmux session name, so you can attach to the session using the `tmux attach` command.
 
@@ -41,11 +89,11 @@ When Claude Code Team starts up, it will output the tmux session name, so you ca
 $ tmux attach -t ccteam-XXXXX
 ```
 
-### 3. **Give tasks to your Manager:**
+### 4. **Give tasks to your Manager:**
 
 Once connected, you'll see three panes with different AI roles. Start by talking to the Manager (usually the left pane) and describe what you want to build or fix.
 
-### 4. **Watch the collaboration:**
+### 5. **Watch the collaboration:**
 
 The Manager will delegate tasks to the Leader, who will create specifications for the Worker. You can observe the entire process and provide feedback at any stage.
 
