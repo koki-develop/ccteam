@@ -1,6 +1,8 @@
 {
   "permissions": {
     "allow": [
+      "Bash(npx ccteam@latest send:*)",
+      "Bash(npx ccteam@latest messages delete:*)",
       "Bash(bun run ./src/main.ts:*)",
       "Bash(bun run fmt:*)",
       "Bash(bun run lint:*)",
