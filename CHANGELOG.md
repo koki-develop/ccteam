@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.5](https://github.com/koki-develop/claude-code-team/compare/v0.0.4...v0.0.5) (2025-06-18)
+
+
+### Bug Fixes
+
+* ccteam -&gt; Claude Code Team ([f905258](https://github.com/koki-develop/claude-code-team/commit/f905258441f5ea21befe7279c149b99e189e7ce6))
+* Fix manager instruction ([cd11d37](https://github.com/koki-develop/claude-code-team/commit/cd11d37f33c9f75128f863a23e0428355206c3cf))
+
 ## [0.0.4](https://github.com/koki-develop/claude-code-team/compare/v0.0.3...v0.0.4) (2025-06-18)
 
 
