@@ -10,15 +10,13 @@ import workerInstruction from "../../instructions/worker.md" with {
   type: "text",
 };
 import { tmux } from "../../lib/tmux";
-import { generateSessionName, saveSessionName, sleep } from "../../lib/util";
+import { generateSessionName, sleep } from "../../lib/util";
 import { send } from "../send";
 
 export async function start() {
   console.log("[INFO] Starting ccteam initialization...");
 
   const session = generateSessionName();
-  saveSessionName(session);
-
   await tmux(
     // Create a new session
     "new-session",

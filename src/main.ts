@@ -29,7 +29,7 @@ program
   .argument("<role>", "The role to send message to (worker/leader/manager)")
   .argument("<message>", "The message to send")
   .action(async (role, message) => {
-    const session = loadSessionName();
+    const session = await loadSessionName();
     await send({ role, message, session });
   });
 
