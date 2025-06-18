@@ -11,7 +11,7 @@
   },
   "license": "MIT",
   "bin": {
-    "ccteam": "dist/index.js"
+    "ccteam": "dist/main.js"
   },
   "files": ["dist"],
   "scripts": {
