@@ -37,6 +37,12 @@ bun test src/lib/config.spec.ts
 # Initialize tmux session with 3 Claude Code instances (generates unique session name)
 ccteam start
 
+# Start with custom configuration file
+ccteam start -c path/to/config.yml
+
+# Start with CLI flags overriding configuration
+ccteam start --manager-model opus --worker-skip-permissions
+
 # Create default configuration file
 ccteam init
 
@@ -49,6 +55,15 @@ ccteam send <role> <message>  # role: manager|leader|worker
 # Delete processed message files (for agents only)
 ccteam messages delete <message-file>
 ```
+
+### CLI Flags for Start Command
+The `start` command supports flags to override configuration file settings:
+- `--manager-model <string>`: Manager role model
+- `--manager-skip-permissions`: Manager role skip permissions
+- `--leader-model <string>`: Leader role model
+- `--leader-skip-permissions`: Leader role skip permissions
+- `--worker-model <string>`: Worker role model
+- `--worker-skip-permissions`: Worker role skip permissions
 
 ## Architecture
 
@@ -84,6 +99,8 @@ ccteam messages delete <message-file>
 **Configuration System**:
 - Configuration files use YAML format with Zod validation
 - `loadConfig()` function handles file reading and parsing with error checking
+- CLI flags override configuration file settings when provided
+- Explicitly specified config files (via --config) must exist or an error is thrown
 - Default configuration logic is handled in the `start` command for better separation of concerns
 - File overwrite protection prevents accidental configuration loss
 
@@ -109,10 +126,11 @@ ccteam messages delete <message-file>
 - **Testing Framework**: Bun's built-in test runner with `.spec.ts` files
 
 ### Important Constraints
-- Never use `tmux send-keys` directly - always use `bun run ./src/main.ts send`
-- Never use `rm` to delete message files - always use `bun run ./src/main.ts messages delete`
+- Never use `tmux send-keys` directly - always use `bun run ./src/main.ts send` or `npx ccteam@latest send`
+- Never use `rm` to delete message files - always use `bun run ./src/main.ts messages delete` or `npx ccteam@latest messages delete`
 - Tmux operations must use the `tmux()` wrapper in `lib/tmux.ts`
 - All role instructions are embedded in the binary from `src/instructions/*.md`
+- The `start` function requires a StartOptions object (not optional)
 
 ## Project Structure
 ```
