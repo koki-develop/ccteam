@@ -19,8 +19,9 @@ program
   .description(
     "Initialize tmux session with 3 Claude Code instances (Manager/Leader/Worker)",
   )
-  .action(async () => {
-    await start();
+  .option("-c, --config <path>", "Configuration file path")
+  .action(async (options) => {
+    await start(options.config);
   });
 
 program
