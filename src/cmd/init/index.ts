@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-export async function init(configPath: string): Promise<void> {
+export async function initCommand(configPath: string): Promise<void> {
   const targetPath = path.resolve(process.cwd(), configPath);
 
   if (fs.existsSync(targetPath)) {

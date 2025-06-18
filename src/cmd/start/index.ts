@@ -10,9 +10,8 @@ import workerInstruction from "../../instructions/worker.md" with {
   type: "text",
 };
 import { type Config, type RoleConfig, loadConfig } from "../../lib/config";
-import { tmux } from "../../lib/tmux";
+import { send, tmux } from "../../lib/tmux";
 import { generateSessionName, sleep } from "../../lib/util";
-import { send } from "../send";
 
 interface StartOptions {
   config?: string;
@@ -38,7 +37,7 @@ function buildClaudeCommand(roleConfig: RoleConfig): string[] {
   return command;
 }
 
-export async function start(options: StartOptions) {
+export async function startCommand(options: StartOptions) {
   console.log("[INFO] Starting ccteam initialization...");
 
   if (options.config) {

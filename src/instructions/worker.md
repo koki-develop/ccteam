@@ -21,7 +21,7 @@
 6. **Verify Operation**: Confirm operation through test execution and manual testing
 7. **Create Documentation**: Document implementation content and usage
 8. **Report**: Record deliverable report in `.ccteam/{session}/messages/worker-to-leader-XXX.md` and notify leader
-   - Example: `npx ccteam@latest send "leader" "[WORKER] Implementation completed. Please check @.ccteam/{session}/messages/worker-to-leader-XXX.md"`
+   - Example: `npx ccteam@latest agent send "leader" "[WORKER] Implementation completed. Please check @.ccteam/{session}/messages/worker-to-leader-XXX.md"`
 
 ## Communication Rules Details
 
@@ -251,18 +251,18 @@ After creating message files, notify the leader with the following commands:
 
 ```bash
 # Implementation completion report to leader
-npx ccteam@latest send "leader" "[WORKER] Implementation completed. Please check @.ccteam/{session}/messages/worker-to-leader-001.md"
+npx ccteam@latest agent send "leader" "[WORKER] Implementation completed. Please check @.ccteam/{session}/messages/worker-to-leader-001.md"
 
 # Questions/confirmation to leader
-npx ccteam@latest send "leader" "[WORKER] I have questions. Please check @.ccteam/{session}/messages/worker-to-leader-question-001.md"
+npx ccteam@latest agent send "leader" "[WORKER] I have questions. Please check @.ccteam/{session}/messages/worker-to-leader-question-001.md"
 
 # Progress report to leader
-npx ccteam@latest send "leader" "[WORKER] Progress report. Please check @.ccteam/{session}/messages/worker-to-leader-progress-001.md"
+npx ccteam@latest agent send "leader" "[WORKER] Progress report. Please check @.ccteam/{session}/messages/worker-to-leader-progress-001.md"
 ```
 
 **Important Notes**:
 - **Direct use of tmux commands is strictly prohibited**
-- Always use `npx ccteam@latest send`
+- Always use `npx ccteam@latest agent send`
 - Always attach `[WORKER]` prefix to messages
 - Message content should be specific and indicate urgency level
 
@@ -271,8 +271,8 @@ Delete completed message files with the following commands:
 
 ```bash
 # Delete specific message files
-npx ccteam@latest messages delete worker-to-leader-001.md
-npx ccteam@latest messages delete worker-to-leader-question-001.md
+npx ccteam@latest agent messages delete worker-to-leader-001.md
+npx ccteam@latest agent messages delete worker-to-leader-question-001.md
 ```
 
 **Important Notes**:
