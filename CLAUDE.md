@@ -24,12 +24,24 @@ bun run lint
 
 # Type check
 bun run typecheck
+
+# Run tests
+bun test
+
+# Run specific test file
+bun test src/lib/config.spec.ts
 ```
 
 ### CLI Usage
 ```bash
 # Initialize tmux session with 3 Claude Code instances (generates unique session name)
 ccteam start
+
+# Create default configuration file
+ccteam init
+
+# Create configuration file at custom path
+ccteam init -c path/to/config.yml
 
 # Send message to specific role (for agents only)
 ccteam send <role> <message>  # role: manager|leader|worker
@@ -69,6 +81,12 @@ ccteam messages delete <message-file>
 - Progress messages for multi-step operations
 - Decorative completion messages with emoji and separators
 
+**Configuration System**:
+- Configuration files use YAML format with Zod validation
+- `loadConfig()` function handles file reading and parsing with error checking
+- Default configuration logic is handled in the `start` command for better separation of concerns
+- File overwrite protection prevents accidental configuration loss
+
 **File Operations**:
 - Always use session-aware path helpers: `getMessagesPath()` and `getInstructionsPath()` from `lib/util.ts`
 - Check existence before file operations
@@ -88,7 +106,7 @@ ccteam messages delete <message-file>
 - **CLI Framework**: Commander.js
 - **Build Process**: Bun.build API with external packages and node target
 - **Release Management**: Release Please for automated releases
-- **No testing framework configured yet**
+- **Testing Framework**: Bun's built-in test runner with `.spec.ts` files
 
 ### Important Constraints
 - Never use `tmux send-keys` directly - always use `bun run ./src/main.ts send`
@@ -101,11 +119,13 @@ ccteam messages delete <message-file>
 src/
 ├── main.ts              # CLI entry point
 ├── cmd/                 # Command implementations
+│   ├── init/            # Configuration file creation command
 │   ├── messages/        # Message management commands
 │   ├── send/            # Message sending command
 │   └── start/           # Session initialization command
 ├── instructions/        # Role-specific instruction documents
 ├── lib/                 # Shared utilities
+│   ├── config.ts        # Configuration loading and validation
 │   ├── tmux.ts          # tmux command wrapper
 │   └── util.ts          # General utilities (sleep, session management, etc.)
 └── types/               # TypeScript type definitions
