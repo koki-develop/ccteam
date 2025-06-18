@@ -1,5 +1,6 @@
 import { Command } from "commander";
 import packageJson from "../package.json" with { type: "json" };
+import { init } from "./cmd/init";
 import { deleteMessage } from "./cmd/messages";
 import { send } from "./cmd/send";
 import { start } from "./cmd/start";
@@ -22,6 +23,18 @@ program
   .option("-c, --config <path>", "Configuration file path")
   .action(async (options) => {
     await start(options.config);
+  });
+
+program
+  .command("init")
+  .description("Create ccteam.yml with default configuration and comments")
+  .option(
+    "-c, --config <path>",
+    "Configuration file path to create",
+    "ccteam.yml",
+  )
+  .action(async (options) => {
+    await init(options.config);
   });
 
 program
