@@ -50,10 +50,10 @@ npx ccteam@latest init
 npx ccteam@latest init -c path/to/config.yml
 
 # Send message to specific role (for agents only)
-npx ccteam@latest send <role> <message>  # role: manager|leader|worker
+npx ccteam@latest agent send <role> <message>  # role: manager|leader|worker
 
 # Delete processed message files (for agents only)
-npx ccteam@latest messages delete <message-file>
+npx ccteam@latest agent messages delete <message-file>
 ```
 
 ### CLI Flags for Start Command
@@ -75,7 +75,7 @@ The `start` command supports flags to override configuration file settings:
 ### Communication Protocol
 - Messages between roles use file-based communication via `.ccteam/<session_name>/messages/` directory
 - Each role has a prefix: `[MANAGER]`, `[LEADER]`, `[WORKER]`
-- Messages are sent using the CLI's `send` command, NOT direct tmux commands
+- Messages are sent using the CLI's `agent send` command, NOT direct tmux commands
 - Message files must follow naming pattern: `{sender}-to-{receiver}-{id}.md`
 - Each session maintains its own isolated message directory to prevent interference
 
@@ -126,8 +126,8 @@ The `start` command supports flags to override configuration file settings:
 - **Testing Framework**: Bun's built-in test runner with `.spec.ts` files
 
 ### Important Constraints
-- Never use `tmux send-keys` directly - always use `bun run ./src/main.ts send` or `npx ccteam@latest send`
-- Never use `rm` to delete message files - always use `bun run ./src/main.ts messages delete` or `npx ccteam@latest messages delete`
+- Never use `tmux send-keys` directly - always use `bun run ./src/main.ts agent send` or `npx ccteam@latest agent send`
+- Never use `rm` to delete message files - always use `bun run ./src/main.ts agent messages delete` or `npx ccteam@latest agent messages delete`
 - Tmux operations must use the `tmux()` wrapper in `lib/tmux.ts`
 - All role instructions are embedded in the binary from `src/instructions/*.md`
 - The `start` function requires a StartOptions object (not optional)
@@ -137,9 +137,8 @@ The `start` command supports flags to override configuration file settings:
 src/
 ├── main.ts              # CLI entry point
 ├── cmd/                 # Command implementations
+│   ├── agent/           # Agent commands (send, messages)
 │   ├── init/            # Configuration file creation command
-│   ├── messages/        # Message management commands
-│   ├── send/            # Message sending command
 │   └── start/           # Session initialization command
 ├── instructions/        # Role-specific instruction documents
 ├── lib/                 # Shared utilities
