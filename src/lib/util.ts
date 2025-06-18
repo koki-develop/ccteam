@@ -29,8 +29,3 @@ export async function getMessagesPath(): Promise<string> {
   const basePath = await getSessionBasePath();
   return path.join(basePath, "messages");
 }
-
-export async function getInstructionsPath(): Promise<string> {
-  const basePath = await getSessionBasePath();
-  return path.join(basePath, "instructions");
-}

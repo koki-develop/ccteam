@@ -10,11 +10,7 @@ import workerInstruction from "../../instructions/worker.md" with {
   type: "text",
 };
 import { tmux } from "../../lib/tmux";
-import {
-  generateSessionName,
-  getInstructionsPath,
-  sleep,
-} from "../../lib/util";
+import { generateSessionName, sleep } from "../../lib/util";
 import { send } from "../send";
 
 export async function start() {
@@ -59,7 +55,7 @@ export async function start() {
   console.log(`[INFO] Created tmux session: ${session}`);
 
   console.log("[INFO] Setting up roles...");
-  await setupInstructions();
+  await setupInstructions(session);
   await setupManager(session);
   await setupLeader(session);
   await setupEditor(session);
@@ -68,8 +64,13 @@ export async function start() {
   showAttachInstructions(session);
 }
 
-async function setupInstructions() {
-  const instructionsDir = await getInstructionsPath();
+async function setupInstructions(session: string) {
+  const instructionsDir = path.join(
+    process.cwd(),
+    ".ccteam",
+    session,
+    "instructions",
+  );
   if (!fs.existsSync(instructionsDir)) {
     fs.mkdirSync(instructionsDir, { recursive: true });
   }
