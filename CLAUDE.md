@@ -35,25 +35,25 @@ bun test src/lib/config.spec.ts
 ### CLI Usage
 ```bash
 # Initialize tmux session with 3 Claude Code instances (generates unique session name)
-ccteam start
+npx ccteam@latest start
 
 # Start with custom configuration file
-ccteam start -c path/to/config.yml
+npx ccteam@latest start -c path/to/config.yml
 
 # Start with CLI flags overriding configuration
-ccteam start --manager-model opus --worker-skip-permissions
+npx ccteam@latest start --manager-model opus --worker-skip-permissions
 
 # Create default configuration file
-ccteam init
+npx ccteam@latest init
 
 # Create configuration file at custom path
-ccteam init -c path/to/config.yml
+npx ccteam@latest init -c path/to/config.yml
 
 # Send message to specific role (for agents only)
-ccteam send <role> <message>  # role: manager|leader|worker
+npx ccteam@latest send <role> <message>  # role: manager|leader|worker
 
 # Delete processed message files (for agents only)
-ccteam messages delete <message-file>
+npx ccteam@latest messages delete <message-file>
 ```
 
 ### CLI Flags for Start Command
