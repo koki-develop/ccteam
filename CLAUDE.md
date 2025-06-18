@@ -13,14 +13,17 @@ ccteam (Claude Code Team) is a CLI tool that orchestrates multiple Claude Code i
 # Run the CLI directly with Bun
 bun run ./src/main.ts
 
-# Format code
+# Build the project (creates dist/main.js)
+bun run build
+
+# Format code with Biome
 bun run fmt
 
-# Lint code  
+# Lint code with Biome
 bun run lint
 
-# Type check (no test command defined yet)
-bun tsc --noEmit
+# Type check
+bun run typecheck
 ```
 
 ### CLI Usage
@@ -43,10 +46,11 @@ ccteam messages delete <message-file>
 3. **Worker** - Implements code based on Leader's specifications
 
 ### Communication Protocol
-- Messages between roles use file-based communication via `.ccteam/messages/` directory
+- Messages between roles use file-based communication via `.ccteam/<session_name>/messages/` directory
 - Each role has a prefix: `[MANAGER]`, `[LEADER]`, `[WORKER]`
 - Messages are sent using the CLI's `send` command, NOT direct tmux commands
 - Message files must follow naming pattern: `{sender}-to-{receiver}-{id}.md`
+- Each session maintains its own isolated message directory to prevent interference
 
 ### Code Patterns
 
@@ -66,21 +70,24 @@ ccteam messages delete <message-file>
 - Decorative completion messages with emoji and separators
 
 **File Operations**:
-- Always use `path.join(process.cwd(), ".ccteam", ...)` for paths
+- Always use session-aware path helpers: `getMessagesPath()` and `getInstructionsPath()` from `lib/util.ts`
 - Check existence before file operations
 - Use Bun's text import syntax for markdown files: `import ... with { type: "text" }`
 
 **Session Management**:
 - Session names are dynamically generated as `ccteam-{5randomChars}`
-- Session name is persisted in `.ccteam/session` file
-- Use `loadSessionName()` from `lib/util.ts` to retrieve current session
+- Session name is retrieved from tmux using `loadSessionName()` from `lib/util.ts`
+- Each session creates isolated directories: `.ccteam/<session_name>/messages/` and `.ccteam/<session_name>/instructions/`
+- Multiple sessions can run simultaneously without interference
 
 ### Technical Stack
 - **Runtime**: Bun v1.2.16 (direct TypeScript execution)
 - **Language**: TypeScript with ESNext target and strict mode
-- **Module Resolution**: Bundler mode
+- **Module Resolution**: Bundler mode with `.ts` import extensions allowed
 - **Code Quality**: Biome for formatting/linting with pre-commit hooks
 - **CLI Framework**: Commander.js
+- **Build Process**: Bun.build API with external packages and node target
+- **Release Management**: Release Please for automated releases
 - **No testing framework configured yet**
 
 ### Important Constraints
@@ -105,6 +112,8 @@ src/
 ```
 
 ## Development Notes
-- Pre-commit hooks run Biome formatting/linting via Husky
-- TypeScript is not transpiled - Bun executes `.ts` files directly
-- The `.ccteam/` directory is created at runtime in the working directory
+- Pre-commit hooks run Biome formatting/linting via Husky and lint-staged
+- TypeScript is not transpiled during development - Bun executes `.ts` files directly
+- Session-specific directories (`.ccteam/<session_name>/`) are created at runtime in the working directory
+- Build process creates a single bundled file at `dist/main.js` with external dependencies
+- Test files should use `*.spec.ts` naming convention and be placed alongside implementation files
