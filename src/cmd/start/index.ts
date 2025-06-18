@@ -9,12 +9,32 @@ import managerInstruction from "../../instructions/manager.md" with {
 import workerInstruction from "../../instructions/worker.md" with {
   type: "text",
 };
+import { type Config, type RoleConfig, loadConfig } from "../../lib/config";
 import { tmux } from "../../lib/tmux";
 import { generateSessionName, sleep } from "../../lib/util";
 import { send } from "../send";
 
-export async function start() {
+function buildClaudeCommand(roleConfig: RoleConfig): string[] {
+  const command = ["claude"];
+
+  if (roleConfig.model) {
+    command.push("--model", roleConfig.model);
+  }
+
+  if (roleConfig.skipPermissions) {
+    command.push("--skip-permissions");
+  }
+
+  return command;
+}
+
+export async function start(configPath?: string) {
   console.log("[INFO] Starting ccteam initialization...");
+
+  if (configPath && configPath !== "ccteam.yml") {
+    console.log(`[INFO] Using config file: ${configPath}`);
+  }
+  const config = await loadConfig(configPath);
 
   const session = generateSessionName();
   await tmux(
@@ -56,9 +76,9 @@ export async function start() {
 
   console.log("[INFO] Setting up roles...");
   await setupInstructions(session);
-  await setupManager(session);
-  await setupLeader(session);
-  await setupEditor(session);
+  await setupManager(session, config);
+  await setupLeader(session, config);
+  await setupEditor(session, config);
   console.log("[INFO] All roles initialized");
 
   showAttachInstructions(session);
@@ -84,8 +104,9 @@ async function setupInstructions(session: string) {
   fs.writeFileSync(workerInstructionPath, workerInstruction);
 }
 
-async function setupManager(session: string) {
-  await send({ session, role: "manager", message: "claude" });
+async function setupManager(session: string, config: Config) {
+  const command = buildClaudeCommand(config.roles.manager);
+  await send({ session, role: "manager", message: command.join(" ") });
   await sleep(3000);
 
   const prompt = `
@@ -96,8 +117,9 @@ Please read @.ccteam/${session}/instructions/manager.md and understand your role
   await send({ session, role: "manager", message: prompt });
 }
 
-async function setupLeader(session: string) {
-  await send({ session, role: "leader", message: "claude" });
+async function setupLeader(session: string, config: Config) {
+  const command = buildClaudeCommand(config.roles.leader);
+  await send({ session, role: "leader", message: command.join(" ") });
   await sleep(3000);
 
   const prompt = `
@@ -108,8 +130,9 @@ Please read @.ccteam/${session}/instructions/leader.md and understand your role.
   await send({ session, role: "leader", message: prompt });
 }
 
-async function setupEditor(session: string) {
-  await send({ session, role: "worker", message: "claude" });
+async function setupEditor(session: string, config: Config) {
+  const command = buildClaudeCommand(config.roles.worker);
+  await send({ session, role: "worker", message: command.join(" ") });
   await sleep(3000);
 
   const prompt = `
