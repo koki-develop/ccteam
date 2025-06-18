@@ -21,8 +21,14 @@ program
     "Initialize tmux session with 3 Claude Code instances (Manager/Leader/Worker)",
   )
   .option("-c, --config <path>", "Configuration file path")
+  .option("--manager-model <string>", "Manager role model")
+  .option("--manager-skip-permissions", "Manager role skip permissions")
+  .option("--leader-model <string>", "Leader role model")
+  .option("--leader-skip-permissions", "Leader role skip permissions")
+  .option("--worker-model <string>", "Worker role model")
+  .option("--worker-skip-permissions", "Worker role skip permissions")
   .action(async (options) => {
-    await start(options.config);
+    await start(options);
   });
 
 program
