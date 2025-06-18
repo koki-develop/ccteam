@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.0](https://github.com/koki-develop/claude-code-team/compare/v0.3.0...v0.4.0) (2025-06-18)
+
+
+### Features
+
+* add agent subcommand to organize agent-specific commands ([#12](https://github.com/koki-develop/claude-code-team/issues/12)) ([8d82f7a](https://github.com/koki-develop/claude-code-team/commit/8d82f7a23780f70b168a2a6930cc69408f0ad31d))
+* add CLI flags for role-specific model and permission settings ([#9](https://github.com/koki-develop/claude-code-team/issues/9)) ([7bf5ec9](https://github.com/koki-develop/claude-code-team/commit/7bf5ec9a41be1089a1b76b428ce7d7bb76e6b466))
+
 ## [0.3.0](https://github.com/koki-develop/claude-code-team/compare/v0.2.0...v0.3.0) (2025-06-18)
 
 
