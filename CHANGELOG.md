@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.3.0](https://github.com/koki-develop/claude-code-team/compare/v0.2.0...v0.3.0) (2025-06-18)
+
+
+### Features
+
+* add --config option to start command ([4dce488](https://github.com/koki-develop/claude-code-team/commit/4dce488d1d0b0c8c9268dc90580b9bc9a6096456))
+* add configuration file support ([a80b656](https://github.com/koki-develop/claude-code-team/commit/a80b6566db805451b3776982d92cfdae64eeb62e))
+* add init command for configuration file creation ([f411bd5](https://github.com/koki-develop/claude-code-team/commit/f411bd58c249b78e69e1f861ebb7192004dedceb))
+* integrate configuration with start command ([4a0a52e](https://github.com/koki-develop/claude-code-team/commit/4a0a52ea45c86241487c59a664faa619ad9eb3dd))
+
 ## [0.2.0](https://github.com/koki-develop/claude-code-team/compare/v0.1.1...v0.2.0) (2025-06-18)
 
 
