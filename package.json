@@ -2,7 +2,7 @@
   "name": "ccteam",
   "module": "src/main.ts",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "koki-develop <kou.pg.0131@gmail.com>",
   "homepage": "https://github.com/koki-develop/claude-code-team",
   "repository": {
@@ -13,7 +13,9 @@
   "bin": {
     "ccteam": "dist/main.js"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "prepare": "husky",
     "fmt": "biome check --write --unsafe .",
