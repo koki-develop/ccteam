@@ -10,7 +10,11 @@ import workerInstruction from "../../instructions/worker.md" with {
   type: "text",
 };
 import { tmux } from "../../lib/tmux";
-import { generateSessionName, sleep } from "../../lib/util";
+import {
+  generateSessionName,
+  getInstructionsPath,
+  sleep,
+} from "../../lib/util";
 import { send } from "../send";
 
 export async function start() {
@@ -65,7 +69,7 @@ export async function start() {
 }
 
 async function setupInstructions() {
-  const instructionsDir = path.join(process.cwd(), ".ccteam", "instructions");
+  const instructionsDir = await getInstructionsPath();
   if (!fs.existsSync(instructionsDir)) {
     fs.mkdirSync(instructionsDir, { recursive: true });
   }

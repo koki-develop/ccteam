@@ -1,3 +1,4 @@
+import path from "node:path";
 import { tmux } from "./tmux";
 
 export function sleep(ms: number) {
@@ -17,4 +18,19 @@ export function generateSessionName(): string {
 export async function loadSessionName(): Promise<string> {
   const stdout = await tmux("display-message", "-p", "#S");
   return stdout.trim();
+}
+
+async function getSessionBasePath(): Promise<string> {
+  const sessionName = await loadSessionName();
+  return path.join(process.cwd(), ".ccteam", sessionName);
+}
+
+export async function getMessagesPath(): Promise<string> {
+  const basePath = await getSessionBasePath();
+  return path.join(basePath, "messages");
+}
+
+export async function getInstructionsPath(): Promise<string> {
+  const basePath = await getSessionBasePath();
+  return path.join(basePath, "instructions");
 }

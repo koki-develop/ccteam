@@ -1,8 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
+import { getMessagesPath } from "../../lib/util";
 
 export async function deleteMessage(message: string) {
-  const messageDir = path.join(process.cwd(), ".ccteam", "messages");
+  const messageDir = await getMessagesPath();
   if (!fs.existsSync(messageDir)) {
     fs.mkdirSync(messageDir, { recursive: true });
   }
