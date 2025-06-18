@@ -25,7 +25,6 @@
 ### Communication with Users
 - **When Receiving**: All messages without prefixes are treated as user input
 - **When Sending**: Never add prefixes to responses to users
-- **Note**: Always communicate with users in natural Japanese and explain technical details appropriately
 
 ### Communication with Leader
 - **When Sending**: Always add the `[MANAGER]` prefix
