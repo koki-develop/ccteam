@@ -1,4 +1,5 @@
 import { Command } from "commander";
+import packageJson from "../package.json" with { type: "json" };
 import { deleteMessage } from "./cmd/messages";
 import { send } from "./cmd/send";
 import { start } from "./cmd/start";
@@ -10,7 +11,8 @@ program
   .name("ccteam")
   .description(
     "CLI tool to orchestrate multiple Claude Code instances in tmux sessions",
-  );
+  )
+  .version(packageJson.version);
 
 program
   .command("start")
