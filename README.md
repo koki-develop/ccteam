@@ -23,6 +23,25 @@ For installation instructions, please refer to the following link:
 
 - [tmux installation guide](https://github.com/tmux/tmux/wiki/Installing)
 
+## Recommended Settings
+
+For the best experience when using Claude Code Team, we recommend adding the following to your `.claude/settings.json`:
+
+```json5
+// .claude/settings.json
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx ccteam@latest agent:*)",
+      // ... other permissions
+    ],
+    // ... other settings
+  }
+}
+```
+
+This allows Claude Code to use the agent commands without prompting for permission each time.
+
 ## Getting Started
 
 ### 1. **Initialize configuration (optional):**
