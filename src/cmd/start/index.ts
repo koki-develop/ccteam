@@ -14,6 +14,16 @@ import { tmux } from "../../lib/tmux";
 import { generateSessionName, sleep } from "../../lib/util";
 import { send } from "../send";
 
+interface StartOptions {
+  config?: string;
+  managerModel?: string;
+  managerSkipPermissions?: boolean;
+  leaderModel?: string;
+  leaderSkipPermissions?: boolean;
+  workerModel?: string;
+  workerSkipPermissions?: boolean;
+}
+
 function buildClaudeCommand(roleConfig: RoleConfig): string[] {
   const command = ["claude"];
 
@@ -28,13 +38,13 @@ function buildClaudeCommand(roleConfig: RoleConfig): string[] {
   return command;
 }
 
-export async function start(configPath?: string) {
+export async function start(options: StartOptions) {
   console.log("[INFO] Starting ccteam initialization...");
 
-  if (configPath && configPath !== "ccteam.yml") {
-    console.log(`[INFO] Using config file: ${configPath}`);
+  if (options.config) {
+    console.log(`[INFO] Using config file: ${options.config}`);
   }
-  const config = _loadConfig(configPath);
+  const config = _loadConfig(options);
 
   const session = generateSessionName();
   await tmux(
@@ -78,7 +88,7 @@ export async function start(configPath?: string) {
   await setupInstructions(session);
   await setupManager(session, config);
   await setupLeader(session, config);
-  await setupEditor(session, config);
+  await setupWorker(session, config);
   console.log("[INFO] All roles initialized");
 
   showAttachInstructions(session);
@@ -130,7 +140,7 @@ Please read @.ccteam/${session}/instructions/leader.md and understand your role.
   await send({ session, role: "leader", message: prompt });
 }
 
-async function setupEditor(session: string, config: Config) {
+async function setupWorker(session: string, config: Config) {
   const command = buildClaudeCommand(config.roles.worker);
   await send({ session, role: "worker", message: command.join(" ") });
   await sleep(3000);
@@ -151,23 +161,90 @@ function showAttachInstructions(session: string) {
   console.log("=".repeat(60));
 }
 
-function _loadConfig(configPath?: string): Config {
-  const targetPath = (() => {
-    if (configPath) {
-      return path.resolve(process.cwd(), configPath);
-    }
-    return path.resolve(process.cwd(), "ccteam.yml");
-  })();
+function _loadConfig(options: StartOptions): Config {
+  const { config: configPath, ...cliOptions } = options;
 
-  if (!configPath && !fs.existsSync(targetPath)) {
+  const resolvedConfigPath = path.resolve(
+    process.cwd(),
+    configPath ?? "ccteam.yml",
+  );
+
+  if (fs.existsSync(resolvedConfigPath)) {
+    const fileConfig = loadConfig(resolvedConfigPath);
     return {
       roles: {
-        manager: { skipPermissions: false },
-        leader: { skipPermissions: false },
-        worker: { skipPermissions: false },
+        manager: {
+          ...fileConfig.roles.manager,
+          ...(cliOptions.managerModel != null && {
+            model: cliOptions.managerModel,
+          }),
+          ...(cliOptions.managerSkipPermissions != null && {
+            skipPermissions: cliOptions.managerSkipPermissions,
+          }),
+        },
+        leader: {
+          ...fileConfig.roles.leader,
+          ...(cliOptions.leaderModel != null && {
+            model: cliOptions.leaderModel,
+          }),
+          ...(cliOptions.leaderSkipPermissions != null && {
+            skipPermissions: cliOptions.leaderSkipPermissions,
+          }),
+        },
+        worker: {
+          ...fileConfig.roles.worker,
+          ...(cliOptions.workerModel != null && {
+            model: cliOptions.workerModel,
+          }),
+          ...(cliOptions.workerSkipPermissions != null && {
+            skipPermissions: cliOptions.workerSkipPermissions,
+          }),
+        },
       },
     };
   }
 
-  return loadConfig(targetPath);
+  if (configPath) {
+    throw new Error(`Configuration file not found: ${configPath}`);
+  }
+
+  const defaultConfig: Config = {
+    roles: {
+      manager: { skipPermissions: false },
+      leader: { skipPermissions: false },
+      worker: { skipPermissions: false },
+    },
+  };
+
+  return {
+    roles: {
+      manager: {
+        ...defaultConfig.roles.manager,
+        ...(cliOptions.managerModel != null && {
+          model: cliOptions.managerModel,
+        }),
+        ...(cliOptions.managerSkipPermissions != null && {
+          skipPermissions: cliOptions.managerSkipPermissions,
+        }),
+      },
+      leader: {
+        ...defaultConfig.roles.leader,
+        ...(cliOptions.leaderModel != null && {
+          model: cliOptions.leaderModel,
+        }),
+        ...(cliOptions.leaderSkipPermissions != null && {
+          skipPermissions: cliOptions.leaderSkipPermissions,
+        }),
+      },
+      worker: {
+        ...defaultConfig.roles.worker,
+        ...(cliOptions.workerModel != null && {
+          model: cliOptions.workerModel,
+        }),
+        ...(cliOptions.workerSkipPermissions != null && {
+          skipPermissions: cliOptions.workerSkipPermissions,
+        }),
+      },
+    },
+  };
 }

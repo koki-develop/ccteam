@@ -20,9 +20,33 @@ program
   .description(
     "Initialize tmux session with 3 Claude Code instances (Manager/Leader/Worker)",
   )
-  .option("-c, --config <path>", "Configuration file path")
+  .option("-c, --config <path>", "Path to configuration file")
+  .option(
+    "--manager-model <string>",
+    "Claude model for Manager role (e.g. opus, sonnet, haiku)",
+  )
+  .option(
+    "--manager-skip-permissions",
+    "Skip permission prompts for Manager role's Claude Code instance",
+  )
+  .option(
+    "--leader-model <string>",
+    "Claude model for Leader role (e.g. opus, sonnet, haiku)",
+  )
+  .option(
+    "--leader-skip-permissions",
+    "Skip permission prompts for Leader role's Claude Code instance",
+  )
+  .option(
+    "--worker-model <string>",
+    "Claude model for Worker role (e.g. opus, sonnet, haiku)",
+  )
+  .option(
+    "--worker-skip-permissions",
+    "Skip permission prompts for Worker role's Claude Code instance",
+  )
   .action(async (options) => {
-    await start(options.config);
+    await start(options);
   });
 
 program
