@@ -25,24 +25,48 @@ program
     "Claude model for Manager role (e.g. opus, sonnet, haiku)",
   )
   .option(
-    "--manager-skip-permissions",
-    "Skip permission prompts for Manager role's Claude Code instance",
-  )
-  .option(
     "--leader-model <string>",
     "Claude model for Leader role (e.g. opus, sonnet, haiku)",
-  )
-  .option(
-    "--leader-skip-permissions",
-    "Skip permission prompts for Leader role's Claude Code instance",
   )
   .option(
     "--worker-model <string>",
     "Claude model for Worker role (e.g. opus, sonnet, haiku)",
   )
   .option(
+    "--manager-skip-permissions",
+    "Skip permission prompts for Manager role's Claude Code instance",
+  )
+  .option(
+    "--leader-skip-permissions",
+    "Skip permission prompts for Leader role's Claude Code instance",
+  )
+  .option(
     "--worker-skip-permissions",
     "Skip permission prompts for Worker role's Claude Code instance",
+  )
+  .option(
+    "--manager-allowed-tools <string>",
+    "Comma-separated list of allowed tools for Manager (e.g. Bash(git:*),WebFetch)",
+  )
+  .option(
+    "--leader-allowed-tools <string>",
+    "Comma-separated list of allowed tools for Leader (e.g. Bash(git:*),WebFetch)",
+  )
+  .option(
+    "--worker-allowed-tools <string>",
+    "Comma-separated list of allowed tools for Worker (e.g. Bash(git:*),WebFetch)",
+  )
+  .option(
+    "--manager-disallowed-tools <string>",
+    "Comma-separated list of disallowed tools for Manager (e.g. Bash(git:*),WebFetch)",
+  )
+  .option(
+    "--leader-disallowed-tools <string>",
+    "Comma-separated list of disallowed tools for Leader (e.g. Bash(git:*),WebFetch)",
+  )
+  .option(
+    "--worker-disallowed-tools <string>",
+    "Comma-separated list of disallowed tools for Worker (e.g. Bash(git:*),WebFetch)",
   )
   .action(async (options) => {
     await startCommand(options);
