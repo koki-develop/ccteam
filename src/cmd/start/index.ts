@@ -11,27 +11,44 @@ import workerInstruction from "../../instructions/worker.md" with {
 };
 import { type Config, type RoleConfig, loadConfig } from "../../lib/config";
 import { send, tmux } from "../../lib/tmux";
-import { generateSessionName, sleep } from "../../lib/util";
+import { generateSessionName, quote, sleep } from "../../lib/util";
 
 interface StartOptions {
   config?: string;
   managerModel?: string;
   managerSkipPermissions?: boolean;
+  managerAllowedTools?: string;
+  managerDisallowedTools?: string;
   leaderModel?: string;
   leaderSkipPermissions?: boolean;
+  leaderAllowedTools?: string;
+  leaderDisallowedTools?: string;
   workerModel?: string;
   workerSkipPermissions?: boolean;
+  workerAllowedTools?: string;
+  workerDisallowedTools?: string;
 }
 
-function buildClaudeCommand(roleConfig: RoleConfig): string[] {
+export function buildClaudeCommand(roleConfig: RoleConfig): string[] {
   const command = ["claude"];
 
   if (roleConfig.model) {
-    command.push("--model", roleConfig.model);
+    command.push("--model", quote(roleConfig.model));
   }
 
   if (roleConfig.skipPermissions) {
     command.push("--skip-permissions");
+  }
+
+  if (roleConfig.allowedTools && roleConfig.allowedTools.length > 0) {
+    command.push("--allowed-tools", quote(roleConfig.allowedTools.join(",")));
+  }
+
+  if (roleConfig.disallowedTools && roleConfig.disallowedTools.length > 0) {
+    command.push(
+      "--disallowed-tools",
+      quote(roleConfig.disallowedTools.join(",")),
+    );
   }
 
   return command;
@@ -180,6 +197,16 @@ function _loadConfig(options: StartOptions): Config {
           ...(cliOptions.managerSkipPermissions != null && {
             skipPermissions: cliOptions.managerSkipPermissions,
           }),
+          ...(cliOptions.managerAllowedTools != null && {
+            allowedTools: cliOptions.managerAllowedTools
+              .split(",")
+              .map((tool) => tool.trim()),
+          }),
+          ...(cliOptions.managerDisallowedTools != null && {
+            disallowedTools: cliOptions.managerDisallowedTools
+              .split(",")
+              .map((tool) => tool.trim()),
+          }),
         },
         leader: {
           ...fileConfig.roles.leader,
@@ -189,6 +216,16 @@ function _loadConfig(options: StartOptions): Config {
           ...(cliOptions.leaderSkipPermissions != null && {
             skipPermissions: cliOptions.leaderSkipPermissions,
           }),
+          ...(cliOptions.leaderAllowedTools != null && {
+            allowedTools: cliOptions.leaderAllowedTools
+              .split(",")
+              .map((tool) => tool.trim()),
+          }),
+          ...(cliOptions.leaderDisallowedTools != null && {
+            disallowedTools: cliOptions.leaderDisallowedTools
+              .split(",")
+              .map((tool) => tool.trim()),
+          }),
         },
         worker: {
           ...fileConfig.roles.worker,
@@ -197,6 +234,16 @@ function _loadConfig(options: StartOptions): Config {
           }),
           ...(cliOptions.workerSkipPermissions != null && {
             skipPermissions: cliOptions.workerSkipPermissions,
+          }),
+          ...(cliOptions.workerAllowedTools != null && {
+            allowedTools: cliOptions.workerAllowedTools
+              .split(",")
+              .map((tool) => tool.trim()),
+          }),
+          ...(cliOptions.workerDisallowedTools != null && {
+            disallowedTools: cliOptions.workerDisallowedTools
+              .split(",")
+              .map((tool) => tool.trim()),
           }),
         },
       },
@@ -225,6 +272,16 @@ function _loadConfig(options: StartOptions): Config {
         ...(cliOptions.managerSkipPermissions != null && {
           skipPermissions: cliOptions.managerSkipPermissions,
         }),
+        ...(cliOptions.managerAllowedTools != null && {
+          allowedTools: cliOptions.managerAllowedTools
+            .split(",")
+            .map((tool) => tool.trim()),
+        }),
+        ...(cliOptions.managerDisallowedTools != null && {
+          disallowedTools: cliOptions.managerDisallowedTools
+            .split(",")
+            .map((tool) => tool.trim()),
+        }),
       },
       leader: {
         ...defaultConfig.roles.leader,
@@ -234,6 +291,16 @@ function _loadConfig(options: StartOptions): Config {
         ...(cliOptions.leaderSkipPermissions != null && {
           skipPermissions: cliOptions.leaderSkipPermissions,
         }),
+        ...(cliOptions.leaderAllowedTools != null && {
+          allowedTools: cliOptions.leaderAllowedTools
+            .split(",")
+            .map((tool) => tool.trim()),
+        }),
+        ...(cliOptions.leaderDisallowedTools != null && {
+          disallowedTools: cliOptions.leaderDisallowedTools
+            .split(",")
+            .map((tool) => tool.trim()),
+        }),
       },
       worker: {
         ...defaultConfig.roles.worker,
@@ -242,6 +309,16 @@ function _loadConfig(options: StartOptions): Config {
         }),
         ...(cliOptions.workerSkipPermissions != null && {
           skipPermissions: cliOptions.workerSkipPermissions,
+        }),
+        ...(cliOptions.workerAllowedTools != null && {
+          allowedTools: cliOptions.workerAllowedTools
+            .split(",")
+            .map((tool) => tool.trim()),
+        }),
+        ...(cliOptions.workerDisallowedTools != null && {
+          disallowedTools: cliOptions.workerDisallowedTools
+            .split(",")
+            .map((tool) => tool.trim()),
         }),
       },
     },
