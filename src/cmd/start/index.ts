@@ -41,12 +41,12 @@ export function buildClaudeCommand(roleConfig: RoleConfig): string[] {
   }
 
   if (roleConfig.allowedTools && roleConfig.allowedTools.length > 0) {
-    command.push("--allowed-tools", quote(roleConfig.allowedTools.join(",")));
+    command.push("--allowedTools", quote(roleConfig.allowedTools.join(",")));
   }
 
   if (roleConfig.disallowedTools && roleConfig.disallowedTools.length > 0) {
     command.push(
-      "--disallowed-tools",
+      "--disallowedTools",
       quote(roleConfig.disallowedTools.join(",")),
     );
   }
