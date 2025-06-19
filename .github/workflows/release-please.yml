@@ -43,8 +43,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: jdx/mise-action@13abe502c30c1559a5c37dff303831bab82c9402 # v2.2.3
-      - run: bun install --frozen-lockfile
+      - uses: ./.github/actions/setup
 
       - name: Create .npmrc
         run: |
