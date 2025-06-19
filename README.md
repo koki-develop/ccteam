@@ -1,10 +1,26 @@
-# Claude Code Team
+<h1 align="center">Claude Code Team</h1>
 
-[![NPM Version](https://img.shields.io/npm/v/ccteam)](https://www.npmjs.com/package/ccteam)
-[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/koki-develop/claude-code-team/release-please.yml)](https://github.com/koki-develop/claude-code-team/actions/workflows/release-please.yml)
-[![GitHub License](https://img.shields.io/github/license/koki-develop/claude-code-team)](./LICENSE)
+<p align="center">
+<a href="https://www.npmjs.com/package/ccteam"><img src="https://img.shields.io/npm/v/ccteam" alt="NPM Version"></a>
+<a href="https://github.com/koki-develop/claude-code-team/actions/workflows/release-please.yml"><img src="https://img.shields.io/github/actions/workflow/status/koki-develop/claude-code-team/release-please.yml" alt="GitHub Actions Workflow Status"></a>
+<a href="./LICENSE"><img src="https://img.shields.io/github/license/koki-develop/claude-code-team" alt="GitHub License"></a>
+</p>
 
+<p align="center">
 A collaborative AI coding tool that brings multiple Claude Code instances together to work on complex coding tasks.
+</p>
+
+<p align="center">
+<img src="./docs/screenshot.png" alt="Claude Code Team Screenshot" >
+</p>
+
+## Contents
+
+- [What is Claude Code Team?](#what-is-claude-code-team)
+- [Requirements](#requirements)
+- [Recommended Settings](#recommended-settings)
+- [Getting Started](#getting-started)
+- [License](#license)
 
 ## What is Claude Code Team?
 
