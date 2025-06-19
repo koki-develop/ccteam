@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.0](https://github.com/koki-develop/claude-code-team/compare/v0.4.0...v0.5.0) (2025-06-19)
+
+
+### Features
+
+* add tool configuration support for role-specific Claude Code tool restrictions ([#14](https://github.com/koki-develop/claude-code-team/issues/14)) ([9782401](https://github.com/koki-develop/claude-code-team/commit/9782401625bb3d99985f5d4cd1488f6395d0abd7))
+* Enhance CLI output with styling and tool configuration support ([#16](https://github.com/koki-develop/claude-code-team/issues/16)) ([4664ae7](https://github.com/koki-develop/claude-code-team/commit/4664ae71da74004a7220f8b2be8727b142d604ff))
+
 ## [0.4.0](https://github.com/koki-develop/claude-code-team/compare/v0.3.0...v0.4.0) (2025-06-18)
 
 
