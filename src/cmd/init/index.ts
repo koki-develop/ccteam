@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import chalk from "chalk";
 
 export async function initCommand(configPath: string): Promise<void> {
   const targetPath = path.resolve(process.cwd(), configPath);
@@ -87,5 +88,7 @@ roles:
   }
 
   fs.writeFileSync(targetPath, yamlContent);
-  console.log(`[INFO] Configuration file created successfully: ${configPath}`);
+  console.log(
+    `${chalk.green("[SUCCESS]")} Configuration file created: ${chalk.cyan(configPath)}`,
+  );
 }

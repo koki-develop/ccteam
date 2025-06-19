@@ -1,5 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
+import boxen from "boxen";
+import chalk from "chalk";
+import ora from "ora";
 import leaderInstruction from "../../instructions/leader.md" with {
   type: "text",
 };
@@ -55,14 +58,18 @@ export function buildClaudeCommand(roleConfig: RoleConfig): string[] {
 }
 
 export async function startCommand(options: StartOptions) {
-  console.log("[INFO] Starting ccteam initialization...");
+  console.log(`${chalk.blue("[INFO]")} Starting ccteam initialization...`);
 
   if (options.config) {
-    console.log(`[INFO] Using config file: ${options.config}`);
+    console.log(`${chalk.blue("[INFO]")} Using config file: ${options.config}`);
   }
   const config = _loadConfig(options);
 
+  const spinner = ora("Generating session name...").start();
   const session = generateSessionName();
+  spinner.succeed(`Generated session: ${chalk.cyan(session)}`);
+
+  const tmuxSpinner = ora("Creating tmux session...").start();
   await tmux(
     // Create a new session
     "new-session",
@@ -98,14 +105,12 @@ export async function startCommand(options: StartOptions) {
     "-t",
     `${session}:0.0`,
   );
-  console.log(`[INFO] Created tmux session: ${session}`);
+  tmuxSpinner.succeed("Tmux session created with 3 panes");
 
-  console.log("[INFO] Setting up roles...");
   await setupInstructions(session);
   await setupManager(session, config);
   await setupLeader(session, config);
   await setupWorker(session, config);
-  console.log("[INFO] All roles initialized");
 
   showAttachInstructions(session);
 }
@@ -131,6 +136,7 @@ async function setupInstructions(session: string) {
 }
 
 async function setupManager(session: string, config: Config) {
+  const spinner = ora("Initializing Manager role...").start();
   const command = buildClaudeCommand(config.roles.manager);
   await send({ session, role: "manager", message: command.join(" ") });
   await sleep(3000);
@@ -141,9 +147,11 @@ Session name: ${session}
 Please read @.ccteam/${session}/instructions/manager.md and understand your role.
 `.trim();
   await send({ session, role: "manager", message: prompt });
+  spinner.succeed("Manager role initialized");
 }
 
 async function setupLeader(session: string, config: Config) {
+  const spinner = ora("Initializing Leader role...").start();
   const command = buildClaudeCommand(config.roles.leader);
   await send({ session, role: "leader", message: command.join(" ") });
   await sleep(3000);
@@ -154,9 +162,11 @@ Session name: ${session}
 Please read @.ccteam/${session}/instructions/leader.md and understand your role.
 `.trim();
   await send({ session, role: "leader", message: prompt });
+  spinner.succeed("Leader role initialized");
 }
 
 async function setupWorker(session: string, config: Config) {
+  const spinner = ora("Initializing Worker role...").start();
   const command = buildClaudeCommand(config.roles.worker);
   await send({ session, role: "worker", message: command.join(" ") });
   await sleep(3000);
@@ -167,14 +177,31 @@ Session name: ${session}
 Please read @.ccteam/${session}/instructions/worker.md and understand your role.
 `.trim();
   await send({ session, role: "worker", message: prompt });
+  spinner.succeed("Worker role initialized");
 }
 
 function showAttachInstructions(session: string) {
-  console.log("=".repeat(60));
-  console.log("  🎉 Claude Code Team initialization completed!");
-  console.log("  To attach to the session, run the following command:");
-  console.log(`    $ tmux attach-session -t ${session}`);
-  console.log("=".repeat(60));
+  const message = [
+    chalk.white("Your team is set up with 3 roles:"),
+    `${chalk.cyan("  • Manager")} - Task decomposition & delegation`,
+    `${chalk.yellow("  • Leader")} - Review & implementation specs`,
+    `${chalk.magenta("  • Worker")} - Code implementation`,
+    "",
+    chalk.white("To start collaborating:"),
+    chalk.gray("  $ ") + chalk.bold(`tmux attach-session -t ${session}`),
+  ].join("\n");
+
+  console.log(
+    boxen(message, {
+      title: "🎉 Claude Code Team Ready!",
+      titleAlignment: "center",
+      padding: 1,
+      margin: 1,
+      borderStyle: "round",
+      borderColor: "green",
+      backgroundColor: "black",
+    }),
+  );
 }
 
 function _loadConfig(options: StartOptions): Config {
