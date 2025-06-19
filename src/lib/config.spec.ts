@@ -139,5 +139,129 @@ roles:
       expect(relativeConfig).toEqual(absoluteConfig);
       expect(relativeConfig.roles.manager.model).toBe("haiku");
     });
+
+    it("should load config with tool restrictions correctly", () => {
+      const configPath = path.join(TEST_CONFIG_DIR, "tools-config.yml");
+      const configContent = `
+roles:
+  manager:
+    model: haiku
+    skipPermissions: true
+    allowedTools:
+      - "Bash"
+      - "Read"
+      - "Edit"
+    disallowedTools:
+      - "WebFetch"
+      - "WebSearch"
+  leader:
+    model: sonnet
+    allowedTools:
+      - "Read"
+      - "Glob"
+      - "Grep"
+  worker:
+    model: opus
+    disallowedTools:
+      - "WebFetch"
+`;
+      fs.writeFileSync(configPath, configContent);
+
+      const config = loadConfig(configPath);
+      expect(config).toEqual({
+        roles: {
+          manager: {
+            model: "haiku",
+            skipPermissions: true,
+            allowedTools: ["Bash", "Read", "Edit"],
+            disallowedTools: ["WebFetch", "WebSearch"],
+          },
+          leader: {
+            model: "sonnet",
+            skipPermissions: false,
+            allowedTools: ["Read", "Glob", "Grep"],
+          },
+          worker: {
+            model: "opus",
+            skipPermissions: false,
+            disallowedTools: ["WebFetch"],
+          },
+        },
+      });
+    });
+
+    it("should handle empty tool arrays correctly", () => {
+      const configPath = path.join(TEST_CONFIG_DIR, "empty-tools-config.yml");
+      const configContent = `
+roles:
+  manager:
+    model: haiku
+    allowedTools: []
+    disallowedTools: []
+  leader: {}
+  worker: {}
+`;
+      fs.writeFileSync(configPath, configContent);
+
+      const config = loadConfig(configPath);
+      expect(config).toEqual({
+        roles: {
+          manager: {
+            model: "haiku",
+            skipPermissions: false,
+            allowedTools: [],
+            disallowedTools: [],
+          },
+          leader: { skipPermissions: false },
+          worker: { skipPermissions: false },
+        },
+      });
+    });
+
+    it("should throw error for invalid tool array schema", () => {
+      const configPath = path.join(TEST_CONFIG_DIR, "invalid-tools-schema.yml");
+      const configContent = `
+roles:
+  manager:
+    allowedTools: "not-an-array"
+  leader:
+    disallowedTools:
+      - 123
+      - "valid-tool"
+  worker: {}
+`;
+      fs.writeFileSync(configPath, configContent);
+
+      expect(() => loadConfig(configPath)).toThrow();
+    });
+
+    it("should handle special characters in tool names correctly", () => {
+      const configPath = path.join(TEST_CONFIG_DIR, "special-chars-config.yml");
+      const configContent = `
+roles:
+  manager:
+    allowedTools:
+      - "Bash(git:*)"
+      - "Edit"
+    disallowedTools:
+      - "Bash(npm:*)"
+  leader: {}
+  worker: {}
+`;
+      fs.writeFileSync(configPath, configContent);
+
+      const config = loadConfig(configPath);
+      expect(config).toEqual({
+        roles: {
+          manager: {
+            skipPermissions: false,
+            allowedTools: ["Bash(git:*)", "Edit"],
+            disallowedTools: ["Bash(npm:*)"],
+          },
+          leader: { skipPermissions: false },
+          worker: { skipPermissions: false },
+        },
+      });
+    });
   });
 });
