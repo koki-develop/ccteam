@@ -6,6 +6,8 @@ const RoleConfigSchema = z
   .object({
     model: z.string().optional(),
     skipPermissions: z.boolean().default(false),
+    allowedTools: z.array(z.string()).optional(),
+    disallowedTools: z.array(z.string()).optional(),
   })
   .default({});
 
