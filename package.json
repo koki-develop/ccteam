@@ -27,6 +27,7 @@
   "dependencies": {
     "boxen": "8.0.1",
     "chalk": "5.4.1",
+    "command-exists": "1.2.9",
     "commander": "14.0.0",
     "ora": "8.2.0",
     "yaml": "2.8.0",
@@ -35,6 +36,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@types/bun": "1.2.16",
+    "@types/command-exists": "1.2.3",
     "husky": "9.1.7",
     "lint-staged": "16.1.2",
     "typescript": "5.8.3"
