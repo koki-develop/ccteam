@@ -26,11 +26,7 @@ describe("start command", () => {
       };
 
       const command = buildClaudeCommand(roleConfig);
-      expect(command).toEqual([
-        "claude",
-        "--allowed-tools",
-        '"Bash,Read,Edit"',
-      ]);
+      expect(command).toEqual(["claude", "--allowedTools", '"Bash,Read,Edit"']);
     });
 
     it("should build command with disallowed tools using double quotes", () => {
@@ -42,7 +38,7 @@ describe("start command", () => {
       const command = buildClaudeCommand(roleConfig);
       expect(command).toEqual([
         "claude",
-        "--disallowed-tools",
+        "--disallowedTools",
         '"WebFetch,WebSearch"',
       ]);
     });
@@ -57,9 +53,9 @@ describe("start command", () => {
       const command = buildClaudeCommand(roleConfig);
       expect(command).toEqual([
         "claude",
-        "--allowed-tools",
+        "--allowedTools",
         '"Bash(git:*),Edit"',
-        "--disallowed-tools",
+        "--disallowedTools",
         '"Bash(npm:*),WebFetch"',
       ]);
     });
@@ -78,9 +74,9 @@ describe("start command", () => {
         "--model",
         '"sonnet"',
         "--skip-permissions",
-        "--allowed-tools",
+        "--allowedTools",
         '"Bash(git:*),Edit"',
-        "--disallowed-tools",
+        "--disallowedTools",
         '"WebFetch"',
       ]);
     });
@@ -105,7 +101,7 @@ describe("start command", () => {
       const command = buildClaudeCommand(roleConfig);
       expect(command).toEqual([
         "claude",
-        "--allowed-tools",
+        "--allowedTools",
         '"Bash(git:commit,push,pull)"',
       ]);
     });
@@ -120,9 +116,9 @@ describe("start command", () => {
       const command = buildClaudeCommand(roleConfig);
       expect(command).toEqual([
         "claude",
-        "--allowed-tools",
+        "--allowedTools",
         '"Bash(git:commit --message=\\"fix\\")"',
-        "--disallowed-tools",
+        "--disallowedTools",
         '"Tool\\\\with\\\\backslashes"',
       ]);
     });
@@ -136,7 +132,7 @@ describe("start command", () => {
       const command = buildClaudeCommand(roleConfig);
       expect(command).toEqual([
         "claude",
-        "--allowed-tools",
+        "--allowedTools",
         '"Bash(git:commit),Tool🎉"',
       ]);
     });
