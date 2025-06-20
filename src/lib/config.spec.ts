@@ -66,13 +66,6 @@ roles:
       });
     });
 
-    it("should throw error when specified config file does not exist", () => {
-      const configPath = path.join(TEST_CONFIG_DIR, "non-existent.yml");
-      expect(() => loadConfig(configPath)).toThrow(
-        "Configuration file not found",
-      );
-    });
-
     it("should throw error for invalid YAML syntax", () => {
       const configPath = path.join(TEST_CONFIG_DIR, "invalid-syntax.yml");
       const configContent = `

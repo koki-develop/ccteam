@@ -23,10 +23,6 @@ export type RoleConfig = z.infer<typeof RoleConfigSchema>;
 export type Config = z.infer<typeof ConfigSchema>;
 
 export function loadConfig(configPath: string): Config {
-  if (!fs.existsSync(configPath)) {
-    throw new Error(`Configuration file not found: ${configPath}`);
-  }
-
   const fileContent = fs.readFileSync(configPath, "utf8");
   const yamlData = YAML.parse(fileContent);
 
