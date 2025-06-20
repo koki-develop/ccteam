@@ -13,6 +13,7 @@ import workerInstruction from "../../instructions/worker.md" with {
   type: "text",
 };
 import { type Config, type RoleConfig, loadConfig } from "../../lib/config";
+import { CCTeamError } from "../../lib/error";
 import { isTmuxInstalled, send, tmux } from "../../lib/tmux";
 import { generateSessionName, quote, sleep } from "../../lib/util";
 
@@ -63,7 +64,10 @@ export async function startCommand(options: StartOptions) {
   const tmuxCheckSpinner = ora("Checking tmux installation...").start();
   if (!isTmuxInstalled()) {
     tmuxCheckSpinner.fail("tmux check failed");
-    throw new Error("tmux is not installed");
+    throw new CCTeamError(
+      "tmux is not installed",
+      "Please install tmux first. See: https://github.com/tmux/tmux/wiki/Installing",
+    );
   }
   tmuxCheckSpinner.succeed("tmux is installed");
 
@@ -285,7 +289,9 @@ function _loadConfig(options: StartOptions): Config {
   }
 
   if (configPath) {
-    throw new Error(`Configuration file not found: ${configPath}`);
+    throw new CCTeamError(
+      `Configuration file not found: ${chalk.cyan(configPath)}`,
+    );
   }
 
   const defaultConfig: Config = {

@@ -1,9 +1,11 @@
+import chalk from "chalk";
 import { Command } from "commander";
 import packageJson from "../package.json" with { type: "json" };
 import { deleteMessageCommand } from "./cmd/agent/messages";
 import { sendCommand } from "./cmd/agent/send";
 import { initCommand } from "./cmd/init";
 import { startCommand } from "./cmd/start";
+import { CCTeamError } from "./lib/error";
 
 const program = new Command();
 
@@ -111,4 +113,20 @@ messagesCmd
     await deleteMessageCommand(message);
   });
 
-program.parse(process.argv);
+// Parse with error handling
+(async () => {
+  try {
+    await program.parseAsync(process.argv);
+  } catch (err) {
+    if (err instanceof CCTeamError) {
+      console.error(`${chalk.red("[ERROR]")} ${err.message}`);
+      if (err.details) {
+        console.error(`\n${err.details}`);
+      }
+      process.exit(1);
+    } else {
+      // Re-throw other errors
+      throw err;
+    }
+  }
+})();
