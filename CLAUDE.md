@@ -63,10 +63,16 @@ npx ccteam@latest agent messages delete <message-file>
 The `start` command supports flags to override configuration file settings:
 - `--manager-model <string>`: Manager role model
 - `--manager-skip-permissions`: Manager role skip permissions
+- `--manager-allowed-tools <string>`: Manager role allowed tools (comma-separated list)
+- `--manager-disallowed-tools <string>`: Manager role disallowed tools (comma-separated list)
 - `--leader-model <string>`: Leader role model
 - `--leader-skip-permissions`: Leader role skip permissions
+- `--leader-allowed-tools <string>`: Leader role allowed tools (comma-separated list)
+- `--leader-disallowed-tools <string>`: Leader role disallowed tools (comma-separated list)
 - `--worker-model <string>`: Worker role model
 - `--worker-skip-permissions`: Worker role skip permissions
+- `--worker-allowed-tools <string>`: Worker role allowed tools (comma-separated list)
+- `--worker-disallowed-tools <string>`: Worker role disallowed tools (comma-separated list)
 
 ## Architecture
 
@@ -93,11 +99,12 @@ The `start` command supports flags to override configuration file settings:
 - Early validation with clear error messages
 - File existence checks before operations
 - Automatic directory creation with `{ recursive: true }`
+- Throws errors for upper-level handling (no process.exit in library code)
 
 **Logging Convention**:
-- Use `[INFO]` prefix for all console logs
-- Progress messages for multi-step operations
-- Decorative completion messages with emoji and separators
+- Use `[INFO]` prefix for all console logs with chalk.blue
+- Progress messages use ora spinners
+- Decorative completion messages with boxen for important output
 
 **Configuration System**:
 - Configuration files use YAML format with Zod validation
@@ -128,6 +135,7 @@ The `start` command supports flags to override configuration file settings:
 - **Release Management**: Release Please for automated releases
 - **Testing Framework**: Bun's built-in test runner with `.spec.ts` files
 - **CI/CD**: GitHub Actions with lint and build jobs
+- **Styling**: chalk (colors), ora (spinners), boxen (boxes)
 
 ### Important Constraints
 - Never use `tmux send-keys` directly - always use `bun run ./src/main.ts agent send` or `npx ccteam@latest agent send`
@@ -135,6 +143,7 @@ The `start` command supports flags to override configuration file settings:
 - Tmux operations must use the `tmux()` wrapper in `lib/tmux.ts`
 - All role instructions are embedded in the binary from `src/instructions/*.md`
 - The `start` function requires a StartOptions object (not optional)
+- Tmux installation is checked before starting sessions using `command-exists` package
 
 ## Project Structure
 ```
@@ -147,7 +156,7 @@ src/
 ├── instructions/        # Role-specific instruction documents
 ├── lib/                 # Shared utilities
 │   ├── config.ts        # Configuration loading and validation
-│   ├── tmux.ts          # tmux command wrapper
+│   ├── tmux.ts          # tmux command wrapper and installation check
 │   └── util.ts          # General utilities (sleep, session management, etc.)
 └── types/               # TypeScript type definitions
 ```
@@ -160,3 +169,5 @@ src/
 - Test files should use `*.spec.ts` naming convention and be placed alongside implementation files
 - Bun dependencies are installed with exact versions (configured in `bunfig.toml`)
 - When publishing to npm, the build runs automatically via `prepublishOnly` hook
+- Biome configuration enforces double quotes for JavaScript/TypeScript strings
+- Tool configuration (allowed/disallowed tools) can be specified per role for enhanced security
