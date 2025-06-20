@@ -1,4 +1,5 @@
 import { spawn } from "node:child_process";
+import { sync as commandExists } from "command-exists";
 import { sleep } from "./util";
 
 export function tmux(...args: string[]): Promise<string> {
@@ -45,4 +46,8 @@ export async function send({ session, role, message }: SendParams) {
   await tmux("send-keys", "-t", target, message);
   await sleep(1000);
   await tmux("send-keys", "-t", target, "C-m");
+}
+
+export function isTmuxInstalled(): boolean {
+  return commandExists("tmux");
 }

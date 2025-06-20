@@ -13,7 +13,7 @@ import workerInstruction from "../../instructions/worker.md" with {
   type: "text",
 };
 import { type Config, type RoleConfig, loadConfig } from "../../lib/config";
-import { send, tmux } from "../../lib/tmux";
+import { isTmuxInstalled, send, tmux } from "../../lib/tmux";
 import { generateSessionName, quote, sleep } from "../../lib/util";
 
 interface StartOptions {
@@ -59,6 +59,13 @@ export function buildClaudeCommand(roleConfig: RoleConfig): string[] {
 
 export async function startCommand(options: StartOptions) {
   console.log(`${chalk.blue("[INFO]")} Starting ccteam initialization...`);
+
+  const tmuxCheckSpinner = ora("Checking tmux installation...").start();
+  if (!isTmuxInstalled()) {
+    tmuxCheckSpinner.fail("tmux check failed");
+    throw new Error("tmux is not installed");
+  }
+  tmuxCheckSpinner.succeed("tmux is installed");
 
   if (options.config) {
     console.log(`${chalk.blue("[INFO]")} Using config file: ${options.config}`);
