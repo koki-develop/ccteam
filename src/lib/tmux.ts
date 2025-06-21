@@ -1,7 +1,7 @@
 import { spawn } from "node:child_process";
 import { sync as commandExists } from "command-exists";
 import { CCTeamError } from "./error";
-import { sleep } from "./util";
+import { getCurrentRole, sleep } from "./util";
 
 export function tmux(...args: string[]): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -46,8 +46,16 @@ export async function send({ session, role, message }: SendParams) {
     );
   }
 
-  const target = `${session}:0.${roleMap[role]}`;
-  await tmux("send-keys", "-t", target, message);
+  const toRole = roleMap[role];
+  const fromRole = await getCurrentRole();
+
+  const target = `${session}:0.${toRole}`;
+  await tmux(
+    "send-keys",
+    "-t",
+    target,
+    `[${fromRole.toUpperCase()}] ${message}`,
+  );
   await sleep(1000);
   await tmux("send-keys", "-t", target, "C-m");
 }

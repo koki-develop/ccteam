@@ -20,6 +20,19 @@ export async function loadSessionName(): Promise<string> {
   return stdout.trim();
 }
 
+export async function getCurrentRole(): Promise<string> {
+  const stdout = await tmux("display-message", "-p", "#P");
+  const role = {
+    "0": "manager",
+    "1": "leader",
+    "2": "worker",
+  }[stdout.trim()];
+  if (!role) {
+    throw new Error("Failed to get current role");
+  }
+  return role;
+}
+
 async function getSessionBasePath(): Promise<string> {
   const sessionName = await loadSessionName();
   return path.join(process.cwd(), ".ccteam", sessionName);
