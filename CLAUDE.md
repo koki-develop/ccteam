@@ -185,3 +185,35 @@ src/
 - Integration tests verify tmux operations and file-based communication
 - Mock tmux commands using `bun:test` mock functionality for testing without tmux
 - Test data uses temporary directories cleaned up after each test run
+
+## Common Development Tasks
+
+### Running and Testing During Development
+```bash
+# Run the CLI in development mode
+bun run ./src/main.ts start
+
+# Run with custom config during development
+bun run ./src/main.ts start -c ./test-config.yml
+
+# Run a single test file
+bun test src/lib/config.spec.ts
+
+# Run tests in watch mode
+bun test --watch
+
+# Test the built distribution
+bun run build && node dist/main.js start
+```
+
+### Debugging Tips
+- Check message files in `.ccteam/<session_name>/messages/` to debug communication issues
+- Use `tmux list-sessions` to see active ccteam sessions
+- Session logs can be viewed by attaching to tmux: `tmux attach -t ccteam-XXXXX`
+- Message file naming must match pattern: `{sender}-to-{receiver}-{id}.md`
+
+### Release Process
+- Releases are automated via Release Please GitHub Action
+- Commit messages should follow Conventional Commits format
+- Version bumps and CHANGELOG updates are handled automatically
+- NPM publishing occurs automatically on release creation
