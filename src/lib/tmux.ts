@@ -36,14 +36,23 @@ export type SendParams = {
 };
 
 export async function send({ session, from, to, message }: SendParams) {
+  const validRoles: Role[] = ["manager", "leader", "worker"];
   const roleMap: Record<Role, number> = {
     manager: 0,
     leader: 1,
     worker: 2,
   };
-  if (!Object.keys(roleMap).includes(to)) {
+
+  if (from && !validRoles.includes(from)) {
     throw new CCTeamError(
-      `Invalid role: ${to}`,
+      `Invalid from role: ${from}`,
+      "Valid roles are: manager, leader, worker",
+    );
+  }
+
+  if (!validRoles.includes(to)) {
+    throw new CCTeamError(
+      `Invalid to role: ${to}`,
       "Valid roles are: manager, leader, worker",
     );
   }

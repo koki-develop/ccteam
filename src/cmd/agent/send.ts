@@ -1,10 +1,26 @@
+import { CCTeamError } from "../../lib/error";
 import { send } from "../../lib/tmux";
 import type { Role } from "../../lib/types";
-import { getCurrentRole, loadSessionName } from "../../lib/util";
+import { loadSessionName } from "../../lib/util";
 
-export async function sendCommand(role: Role, message: string) {
+export async function sendCommand(from: Role, to: Role, message: string) {
+  const validRoles: Role[] = ["manager", "leader", "worker"];
+
+  if (!validRoles.includes(from)) {
+    throw new CCTeamError(
+      `Invalid role: ${from}`,
+      "Valid roles are: manager, leader, worker",
+    );
+  }
+
+  if (!validRoles.includes(to)) {
+    throw new CCTeamError(
+      `Invalid role: ${to}`,
+      "Valid roles are: manager, leader, worker",
+    );
+  }
+
   const session = await loadSessionName();
-  const from = await getCurrentRole();
-  await send({ session, from, to: role, message });
-  console.log(`[INFO] Message sent to ${role}`);
+  await send({ session, from, to, message });
+  console.log(`[INFO] Message sent to ${to}`);
 }

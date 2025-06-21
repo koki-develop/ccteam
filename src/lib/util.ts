@@ -1,6 +1,5 @@
 import path from "node:path";
 import { tmux } from "./tmux";
-import type { Role } from "./types";
 
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -19,20 +18,6 @@ export function generateSessionName(): string {
 export async function loadSessionName(): Promise<string> {
   const stdout = await tmux("display-message", "-p", "#S");
   return stdout.trim();
-}
-
-export async function getCurrentRole(): Promise<Role> {
-  const stdout = await tmux("display-message", "-p", "#P");
-  const paneMap: Record<string, Role> = {
-    "0": "manager",
-    "1": "leader",
-    "2": "worker",
-  };
-  const role = paneMap[stdout.trim()];
-  if (!role) {
-    throw new Error("Failed to get current role");
-  }
-  return role;
 }
 
 async function getSessionBasePath(): Promise<string> {

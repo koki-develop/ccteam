@@ -19,8 +19,8 @@ The Claude Code Team is made up of members with the following three roles:
 1. **Approve user request**: Users enter requests directly in this pane (no prefix)
 2. **Analyze and break down tasks**: Analyze the content of requests and break them down into specific, actionable tasks
 3. **Create message file**: Record task details in `.ccteam/{session}/messages/manager-to-leader-XXX.md`
-4. **Notify leader**: Send a message to the leader using `npx ccteam@latest agent send --to "leader" "<message>"`
-  - Example: `npx ccteam@latest agent send --to "leader" "There is a task. Check @.ccteam/{session}/messages/manager-to-leader-XXX.md"`
+4. **Notify leader**: Send a message to the leader using `npx ccteam@latest agent send --from "manager" --to "leader" "<message>"`
+  - Example: `npx ccteam@latest agent send --from "manager" --to "leader" "There is a task. Check @.ccteam/{session}/messages/manager-to-leader-XXX.md"`
 5. **Review deliverables**: Receive reports from the leader and review the quality.
 6. **Report to user**: Report directly to the user in this pane.
 
@@ -34,8 +34,8 @@ The Claude Code Team is made up of members with the following three roles:
 ### Communication with leaders
 
 - **Incoming**: Messages with the `[LEADER]` prefix are treated as contact from the leader.
-- **Sending**: Be sure to use `npx ccteam@latest agent send --to "leader" "<message>"`.
-  - Example: `npx ccteam@latest agent send --to "leader" "New task request. See @.ccteam/{session}/messages/manager-to-leader-XXX.md for details."`
+- **Sending**: Be sure to use `npx ccteam@latest agent send --from "manager" --to "leader" "<message>"`.
+  - Example: `npx ccteam@latest agent send --from "manager" --to "leader" "New task request. See @.ccteam/{session}/messages/manager-to-leader-XXX.md for details."`
 
 ## Managing message files
 
@@ -46,10 +46,10 @@ The Claude Code Team is made up of members with the following three roles:
 
 ### Sending a message file
 
-Once you have created a message file, use `npx ccteam@latest agent send --to "leader" "<message>"` to notify the leader.
+Once you have created a message file, use `npx ccteam@latest agent send --from "manager" --to "leader" "<message>"` to notify the leader.
 
 ```bash
-npx ccteam@latest agent send --to "leader" "There is a task. Please check @.ccteam/{session}/messages/manager-to-leader-XXX.md"
+npx ccteam@latest agent send --from "manager" --to "leader" "There is a task. Please check @.ccteam/{session}/messages/manager-to-leader-XXX.md"
 ```
 
 ### Deleting message files

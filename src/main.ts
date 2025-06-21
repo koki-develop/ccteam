@@ -96,12 +96,16 @@ agentCommand
     "Send message to specific role (for agents) - manager/leader/worker",
   )
   .requiredOption(
+    "--from <role>",
+    "The role sending the message (manager/leader/worker)",
+  )
+  .requiredOption(
     "--to <role>",
     "The role to send message to (worker/leader/manager)",
   )
   .argument("<message>", "The message to send")
   .action(async (message, options) => {
-    await sendCommand(options.to, message);
+    await sendCommand(options.from, options.to, message);
   });
 
 const messagesCmd = agentCommand
