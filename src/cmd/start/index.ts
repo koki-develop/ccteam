@@ -159,7 +159,7 @@ async function setupInstructions(session: string) {
 async function setupManager(session: string, config: Config) {
   const spinner = ora("Initializing Manager role...").start();
   const command = buildClaudeCommand(config.roles.manager);
-  await send({ session, role: "manager", message: command.join(" ") });
+  await send({ session, to: "manager", message: command.join(" ") });
   await sleep(3000);
 
   const prompt = `
@@ -167,14 +167,14 @@ You are the Manager role.
 Session name: ${session}
 Please read @.ccteam/${session}/instructions/manager.md and understand your role.
 `.trim();
-  await send({ session, role: "manager", message: prompt });
+  await send({ session, to: "manager", message: prompt });
   spinner.succeed("Manager role initialized");
 }
 
 async function setupLeader(session: string, config: Config) {
   const spinner = ora("Initializing Leader role...").start();
   const command = buildClaudeCommand(config.roles.leader);
-  await send({ session, role: "leader", message: command.join(" ") });
+  await send({ session, to: "leader", message: command.join(" ") });
   await sleep(3000);
 
   const prompt = `
@@ -182,14 +182,14 @@ You are the Leader role.
 Session name: ${session}
 Please read @.ccteam/${session}/instructions/leader.md and understand your role.
 `.trim();
-  await send({ session, role: "leader", message: prompt });
+  await send({ session, to: "leader", message: prompt });
   spinner.succeed("Leader role initialized");
 }
 
 async function setupWorker(session: string, config: Config) {
   const spinner = ora("Initializing Worker role...").start();
   const command = buildClaudeCommand(config.roles.worker);
-  await send({ session, role: "worker", message: command.join(" ") });
+  await send({ session, to: "worker", message: command.join(" ") });
   await sleep(3000);
 
   const prompt = `
@@ -197,7 +197,7 @@ You are the Worker role.
 Session name: ${session}
 Please read @.ccteam/${session}/instructions/worker.md and understand your role.
 `.trim();
-  await send({ session, role: "worker", message: prompt });
+  await send({ session, to: "worker", message: prompt });
   spinner.succeed("Worker role initialized");
 }
 

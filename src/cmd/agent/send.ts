@@ -1,8 +1,10 @@
 import { send } from "../../lib/tmux";
-import { loadSessionName } from "../../lib/util";
+import type { Role } from "../../lib/types";
+import { getCurrentRole, loadSessionName } from "../../lib/util";
 
-export async function sendCommand(role: string, message: string) {
+export async function sendCommand(role: Role, message: string) {
   const session = await loadSessionName();
-  await send({ session, role, message });
+  const from = await getCurrentRole();
+  await send({ session, from, to: role, message });
   console.log(`[INFO] Message sent to ${role}`);
 }
