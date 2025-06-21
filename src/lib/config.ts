@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import YAML from "yaml";
 import { z } from "zod";
+import { CCTeamError } from "./error";
 
 const RoleConfigSchema = z
   .object({
@@ -24,7 +25,27 @@ export type Config = z.infer<typeof ConfigSchema>;
 
 export function loadConfig(configPath: string): Config {
   const fileContent = fs.readFileSync(configPath, "utf8");
-  const yamlData = YAML.parse(fileContent);
 
-  return ConfigSchema.parse(yamlData);
+  let yamlData: Record<string, unknown>;
+  try {
+    yamlData = YAML.parse(fileContent);
+  } catch (yamlError) {
+    if (yamlError instanceof Error) {
+      throw new CCTeamError(
+        "Invalid YAML format in configuration file",
+        yamlError.message,
+      );
+    }
+    throw yamlError;
+  }
+
+  const result = ConfigSchema.safeParse(yamlData);
+  if (!result.success) {
+    const errorMessages = result.error.errors
+      .map((err) => `- ${err.path.join(".")}: ${err.message}`)
+      .join("\n");
+    throw new CCTeamError("Invalid configuration format", errorMessages);
+  }
+
+  return result.data;
 }

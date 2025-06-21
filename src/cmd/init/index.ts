@@ -1,12 +1,15 @@
 import fs from "node:fs";
 import path from "node:path";
 import chalk from "chalk";
+import { CCTeamError } from "../../lib/error";
 
 export async function initCommand(configPath: string): Promise<void> {
   const targetPath = path.resolve(process.cwd(), configPath);
 
   if (fs.existsSync(targetPath)) {
-    throw new Error(`Configuration file already exists: ${targetPath}`);
+    throw new CCTeamError(
+      `Configuration file already exists: ${chalk.cyan(targetPath)}`,
+    );
   }
 
   const yamlContent = `# Claud Code Team (https://www.npmjs.com/package/ccteam) configuration file

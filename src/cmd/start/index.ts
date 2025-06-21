@@ -14,7 +14,7 @@ import workerInstruction from "../../instructions/worker.md" with {
 };
 import { type Config, type RoleConfig, loadConfig } from "../../lib/config";
 import { CCTeamError } from "../../lib/error";
-import { isTmuxInstalled, send, tmux } from "../../lib/tmux";
+import { isInstalled, send, tmux } from "../../lib/tmux";
 import { generateSessionName, quote, sleep } from "../../lib/util";
 
 interface StartOptions {
@@ -62,7 +62,7 @@ export async function startCommand(options: StartOptions) {
   console.log(`${chalk.blue("[INFO]")} Starting ccteam initialization...`);
 
   const tmuxCheckSpinner = ora("Checking tmux installation...").start();
-  if (!isTmuxInstalled()) {
+  if (!isInstalled("tmux")) {
     tmuxCheckSpinner.fail("tmux check failed");
     throw new CCTeamError(
       "tmux is not installed",
@@ -70,6 +70,16 @@ export async function startCommand(options: StartOptions) {
     );
   }
   tmuxCheckSpinner.succeed("tmux is installed");
+
+  const claudeCheckSpinner = ora("Checking claude CLI installation...").start();
+  if (!isInstalled("claude")) {
+    claudeCheckSpinner.fail("claude CLI check failed");
+    throw new CCTeamError(
+      "claude CLI is not installed",
+      "Please install Claude CLI first. See: https://docs.anthropic.com/en/docs/claude-code/overview",
+    );
+  }
+  claudeCheckSpinner.succeed("claude CLI is installed");
 
   if (options.config) {
     console.log(`${chalk.blue("[INFO]")} Using config file: ${options.config}`);

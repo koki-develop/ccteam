@@ -1,5 +1,6 @@
 import { spawn } from "node:child_process";
 import { sync as commandExists } from "command-exists";
+import { CCTeamError } from "./error";
 import { sleep } from "./util";
 
 export function tmux(...args: string[]): Promise<string> {
@@ -39,7 +40,10 @@ export async function send({ session, role, message }: SendParams) {
     worker: 2,
   };
   if (!Object.keys(roleMap).includes(role)) {
-    throw new Error(`Invalid role: ${role}`);
+    throw new CCTeamError(
+      `Invalid role: ${role}`,
+      "Valid roles are: manager, leader, worker",
+    );
   }
 
   const target = `${session}:0.${roleMap[role]}`;
@@ -48,6 +52,6 @@ export async function send({ session, role, message }: SendParams) {
   await tmux("send-keys", "-t", target, "C-m");
 }
 
-export function isTmuxInstalled(): boolean {
-  return commandExists("tmux");
+export function isInstalled(command: string): boolean {
+  return commandExists(command);
 }
