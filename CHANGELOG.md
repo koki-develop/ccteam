@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.6.0](https://github.com/koki-develop/claude-code-team/compare/v0.5.0...v0.6.0) (2025-06-21)
+
+
+### Features
+
+* add tmux installation check on start command ([#17](https://github.com/koki-develop/claude-code-team/issues/17)) ([b6922b4](https://github.com/koki-develop/claude-code-team/commit/b6922b4e1fe1739884626b3b665858b4bf50fc41))
+* enhance error handling throughout the codebase ([7664474](https://github.com/koki-develop/claude-code-team/commit/766447468405d41da6d105d8f638d4e9944afa33))
+* enhance tmux message sending with role-based prefixes ([fd783d0](https://github.com/koki-develop/claude-code-team/commit/fd783d0922ae4b7175d5c3b9000f64deefff0705))
+* implement comprehensive error handling system ([668f0a2](https://github.com/koki-develop/claude-code-team/commit/668f0a2ab486844d8425ca8dec1d3680c54699cd))
+
+
+### Bug Fixes
+
+* Fix send command ([89025ab](https://github.com/koki-develop/claude-code-team/commit/89025ab140b51312396336f7360a57be69164f2a))
+* Update instructions ([a3bca00](https://github.com/koki-develop/claude-code-team/commit/a3bca00f68c3a8b339a87ba343403106b9562ad2))
+* Update instructions ([0dd79dc](https://github.com/koki-develop/claude-code-team/commit/0dd79dc46878476d8159b1712002fc5da85ee914))
+
 ## [0.5.0](https://github.com/koki-develop/claude-code-team/compare/v0.4.0...v0.5.0) (2025-06-19)
 
 
