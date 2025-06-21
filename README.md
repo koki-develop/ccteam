@@ -34,10 +34,13 @@ Think of it as having a complete development team where each member has their ow
 
 ## Requirements
 
-Claude Code Team uses **`tmux`** to manage multiple AI sessions.  
-For installation instructions, please refer to the following link:
+Claude Code Team requires the following to be installed:
 
-- [tmux installation guide](https://github.com/tmux/tmux/wiki/Installing)
+1. **Claude Code** - The Anthropic CLI tool that powers the AI assistants
+   - [Claude Code installation guide](https://docs.anthropic.com/en/docs/claude-code/overview)
+
+2. **tmux** - Used to manage multiple AI sessions
+   - [tmux installation guide](https://github.com/tmux/tmux/wiki/Installing)
 
 ## Recommended Settings
 
