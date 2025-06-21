@@ -81,6 +81,12 @@ The `start` command supports flags to override configuration file settings:
 2. **Leader** - Reviews Manager's tasks, creates implementation specs for Worker, reviews Worker's output  
 3. **Worker** - Implements code based on Leader's specifications
 
+### Key Architectural Decisions
+- **File-based Communication**: Chosen over direct process communication for reliability and debugging capabilities
+- **Session Isolation**: Each ccteam session runs in its own namespace to prevent interference
+- **Embedded Instructions**: Role instructions are compiled into the binary rather than loaded from disk at runtime
+- **Stateless CLI**: Each CLI invocation is independent, session state is managed through tmux and filesystem
+
 ### Communication Protocol
 - Messages between roles use file-based communication via `.ccteam/<session_name>/messages/` directory
 - Each role has a prefix: `[MANAGER]`, `[LEADER]`, `[WORKER]`
@@ -100,6 +106,8 @@ The `start` command supports flags to override configuration file settings:
 - File existence checks before operations
 - Automatic directory creation with `{ recursive: true }`
 - Throws errors for upper-level handling (no process.exit in library code)
+- Custom `CCTeamError` class in `src/lib/error.ts` for consistent error handling
+- Error display uses chalk.red and includes helpful suggestions when possible
 
 **Logging Convention**:
 - Use `[INFO]` prefix for all console logs with chalk.blue
@@ -171,3 +179,9 @@ src/
 - When publishing to npm, the build runs automatically via `prepublishOnly` hook
 - Biome configuration enforces double quotes for JavaScript/TypeScript strings
 - Tool configuration (allowed/disallowed tools) can be specified per role for enhanced security
+
+## Testing Strategy
+- Unit tests focus on individual utilities and configuration parsing
+- Integration tests verify tmux operations and file-based communication
+- Mock tmux commands using `bun:test` mock functionality for testing without tmux
+- Test data uses temporary directories cleaned up after each test run
