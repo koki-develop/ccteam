@@ -1,7 +1,8 @@
 import { spawn } from "node:child_process";
 import { sync as commandExists } from "command-exists";
 import { CCTeamError } from "./error";
-import { getCurrentRole, sleep } from "./util";
+import type { Role } from "./types";
+import { sleep } from "./util";
 
 export function tmux(...args: string[]): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -29,32 +30,32 @@ export function tmux(...args: string[]): Promise<string> {
 
 export type SendParams = {
   session: string;
-  role: string;
+  from?: Role;
+  to: Role;
   message: string;
 };
 
-export async function send({ session, role, message }: SendParams) {
-  const roleMap: Record<string, number> = {
+export async function send({ session, from, to, message }: SendParams) {
+  const roleMap: Record<Role, number> = {
     manager: 0,
     leader: 1,
     worker: 2,
   };
-  if (!Object.keys(roleMap).includes(role)) {
+  if (!Object.keys(roleMap).includes(to)) {
     throw new CCTeamError(
-      `Invalid role: ${role}`,
+      `Invalid role: ${to}`,
       "Valid roles are: manager, leader, worker",
     );
   }
 
-  const toRole = roleMap[role];
-  const fromRole = await getCurrentRole();
+  const toPane = roleMap[to];
 
-  const target = `${session}:0.${toRole}`;
+  const target = `${session}:0.${toPane}`;
   await tmux(
     "send-keys",
     "-t",
     target,
-    `[${fromRole.toUpperCase()}] ${message}`,
+    `${from ? `[${from.toUpperCase()}] ` : ""}${message}`,
   );
   await sleep(1000);
   await tmux("send-keys", "-t", target, "C-m");
