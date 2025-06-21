@@ -53,7 +53,7 @@ npx ccteam@latest init
 npx ccteam@latest init -c path/to/config.yml
 
 # Send message to specific role (for agents only)
-npx ccteam@latest agent send <role> <message>  # role: manager|leader|worker
+npx ccteam@latest agent send --to <role> <message>  # role: manager|leader|worker
 
 # Delete processed message files (for agents only)
 npx ccteam@latest agent messages delete <message-file>
@@ -146,7 +146,7 @@ The `start` command supports flags to override configuration file settings:
 - **Styling**: chalk (colors), ora (spinners), boxen (boxes)
 
 ### Important Constraints
-- Never use `tmux send-keys` directly - always use `bun run ./src/main.ts agent send` or `npx ccteam@latest agent send`
+- Never use `tmux send-keys` directly - always use `bun run ./src/main.ts agent send --to <role>` or `npx ccteam@latest agent send --to <role>`
 - Never use `rm` to delete message files - always use `bun run ./src/main.ts agent messages delete` or `npx ccteam@latest agent messages delete`
 - Tmux operations must use the `tmux()` wrapper in `lib/tmux.ts`
 - All role instructions are embedded in the binary from `src/instructions/*.md`

@@ -21,16 +21,16 @@ The Claude Code Team is made up of members with the following three roles:
 4. **Code implementation**: Actually write and modify code
 5. **Verify operation**: Verify operation through test execution and manual testing as necessary
 6. **Document**: Document implementation and usage
-7. **Report**: Publish deliverable reports Log to `.ccteam/{session}/messages/worker-to-leader-XXX.md` and notify the leader using `npx ccteam@latest agent send "leader" "<message>"`
-   - Example: `npx ccteam@latest agent send "leader" "Implementation completed. Check @.ccteam/{session}/messages/worker-to-leader-XXX.md"`
+7. **Report**: Publish deliverable reports Log to `.ccteam/{session}/messages/worker-to-leader-XXX.md` and notify the leader using `npx ccteam@latest agent send --to "leader" "<message>"`
+   - Example: `npx ccteam@latest agent send --to "leader" "Implementation completed. Check @.ccteam/{session}/messages/worker-to-leader-XXX.md"`
 
 ## Detailed communication rules
 
 ### Communication with the leader
 
 - **When receiving**: Messages with the `[LEADER]` prefix are treated as contacts from the leader.
-- **When sending**: Be sure to use `npx ccteam@latest agent send "leader" "<message>"`.
-  - Example: `npx ccteam@latest agent send "leader" "Implementation completed, check @.ccteam/{session}/messages/worker-to-leader-XXX.md"`
+- **When sending**: Be sure to use `npx ccteam@latest agent send --to "leader" "<message>"`.
+  - Example: `npx ccteam@latest agent send --to "leader" "Implementation completed, check @.ccteam/{session}/messages/worker-to-leader-XXX.md"`
 
 ## Message file management
 

@@ -20,26 +20,26 @@ The Claude Code Team is made up of members with the following three roles:
 1. **Task receipt**: Confirm tasks from managers (`[MANAGER]` prefix)
 2. **Work breakdown**: Break down tasks into concrete, actionable work from a technical perspective
 3. **Execution instructions**: Write detailed execution instructions in `.ccteam/{session}/messages/leader-to-worker-XXX.md`
-4. **Notify workers**: Notify workers using `npx ccteam@latest agent send "worker" "<message>"`
-  - Example: `npx ccteam@latest agent send "worker" "Please proceed with implementation. Please check @.ccteam/{session}/messages/leader-to-worker-XXX.md"`
+4. **Notify workers**: Notify workers using `npx ccteam@latest agent send --to "worker" "<message>"`
+  - Example: `npx ccteam@latest agent send --to "worker" "Please proceed with implementation. Please check @.ccteam/{session}/messages/leader-to-worker-XXX.md"`
 5. **Artifact review**: Review the artifacts from the workers (`[WORKER]` prefix).
 6. **Quality check**: Issue correction instructions as necessary and repeat until quality standards are met.
-7. **Manager report**: After quality check, report to the manager using `npx ccteam@latest agent send "manager" "<message>"`.
-  - Example: `npx ccteam@latest agent send "manager" "Review is complete. Check @.ccteam/{session}/messages/leader-to-manager-XXX.md"`
+7. **Manager report**: After quality check, report to the manager using `npx ccteam@latest agent send --to "manager" "<message>"`.
+  - Example: `npx ccteam@latest agent send --to "manager" "Review is complete. Check @.ccteam/{session}/messages/leader-to-manager-XXX.md"`
 
 ## Detailed communication rules
 
 ### Communication with managers
 
 - **When receiving**: Messages with `[MANAGER]` prefix are treated as contacts from managers.
-- **When sending**: Be sure to use `npx ccteam@latest agent send "manager" "<message>"`.
-  - Example: `npx ccteam@latest agent send "manager" "Review is complete. Check @.ccteam/{session}/messages/leader-to-manager-XXX.md"`
+- **When sending**: Be sure to use `npx ccteam@latest agent send --to "manager" "<message>"`.
+  - Example: `npx ccteam@latest agent send --to "manager" "Review is complete. Check @.ccteam/{session}/messages/leader-to-manager-XXX.md"`
 
 ### Communication with workers
 
 - **When receiving**: Messages beginning with `[WORKER]` are treated as contacts from workers.
-- **When sending**: Be sure to use `npx ccteam@latest agent send "worker" "<message>"`.
-  - Example: `npx ccteam@latest agent send "worker" "Please proceed with the implementation. Check @.ccteam/{session}/messages/leader-to-worker-XXX.md"`
+- **When sending**: Be sure to use `npx ccteam@latest agent send --to "worker" "<message>"`.
+  - Example: `npx ccteam@latest agent send --to "worker" "Please proceed with the implementation. Check @.ccteam/{session}/messages/leader-to-worker-XXX.md"`
 
 ## Message file management
 
@@ -50,14 +50,14 @@ The Claude Code Team is made up of members with the following three roles:
 
 ### Sending message files
 
-Once you have created a message file, use `npx ccteam@latest agent send "<role>" "<message>"` to notify the manager and workers.
+Once you have created a message file, use `npx ccteam@latest agent send --to "<role>" "<message>"` to notify the manager and workers.
 
 ```bash
-npx ccteam@latest agent send "worker" "Please proceed with implementation. Please check @.ccteam/{session}/messages/leader-to-worker-XXX.md"
+npx ccteam@latest agent send --to "worker" "Please proceed with implementation. Please check @.ccteam/{session}/messages/leader-to-worker-XXX.md"
 ```
 
 ```bash
-npx ccteam@latest agent send "manager" "Review completed. Please check @.ccteam/{session}/messages/leader-to-manager-XXX.md"
+npx ccteam@latest agent send --to "manager" "Review completed. Please check @.ccteam/{session}/messages/leader-to-manager-XXX.md"
 ```
 
 ### Message file deletion
