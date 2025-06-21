@@ -164,8 +164,10 @@ async function setupManager(session: string, config: Config) {
 
   const prompt = `
 You are the Manager role.
+Read @.ccteam/${session}/instructions/manager.md and understand your role.
+
 Session name: ${session}
-Please read @.ccteam/${session}/instructions/manager.md and understand your role.
+Wait for requests from the User.
 `.trim();
   await send({ session, to: "manager", message: prompt });
   spinner.succeed("Manager role initialized");
@@ -179,8 +181,10 @@ async function setupLeader(session: string, config: Config) {
 
   const prompt = `
 You are the Leader role.
+Read @.ccteam/${session}/instructions/leader.md and understand your role.
+
 Session name: ${session}
-Please read @.ccteam/${session}/instructions/leader.md and understand your role.
+Wait for requests from the Manager.
 `.trim();
   await send({ session, to: "leader", message: prompt });
   spinner.succeed("Leader role initialized");
@@ -194,8 +198,10 @@ async function setupWorker(session: string, config: Config) {
 
   const prompt = `
 You are the Worker role.
+Read @.ccteam/${session}/instructions/worker.md and understand your role.
+
 Session name: ${session}
-Please read @.ccteam/${session}/instructions/worker.md and understand your role.
+Wait for requests from the Leader.
 `.trim();
   await send({ session, to: "worker", message: prompt });
   spinner.succeed("Worker role initialized");
