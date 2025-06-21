@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.7.0](https://github.com/koki-develop/claude-code-team/compare/v0.6.0...v0.7.0) (2025-06-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* The send command now requires both --from and --to flags
+    - Before: npx ccteam@latest agent send --to <role> <message>
+    - After: npx ccteam@latest agent send --from <role> --to <role> <message>
+* The send command now requires --to flag instead of positional argument
+    - Before: npx ccteam@latest agent send <role> <message>
+    - After: npx ccteam@latest agent send --to <role> <message>
+
+### Features
+
+* Add required --from flag to send command and remove getCurrentRole ([31d5a2f](https://github.com/koki-develop/claude-code-team/commit/31d5a2f06d9e03e538242e1b99d89b6e29da708e))
+* Change send command to use --to flag for recipient ([b10e9cb](https://github.com/koki-develop/claude-code-team/commit/b10e9cb3e66cac05144a1fff4031b4cb30d324f6))
+* Release ([1dab860](https://github.com/koki-develop/claude-code-team/commit/1dab860a33f53f9c708cc3e43a2c518f56cd65e5))
+
 ## [0.6.0](https://github.com/koki-develop/claude-code-team/compare/v0.5.0...v0.6.0) (2025-06-21)
 
 
