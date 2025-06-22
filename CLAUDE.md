@@ -57,6 +57,9 @@ npx ccteam@latest agent send --from <role> --to <role> <message>  # role: manage
 
 # Delete processed message files (for agents only)
 npx ccteam@latest agent messages delete <message-file>
+
+# Stop a running session cleanly
+npx ccteam@latest stop <session-name>
 ```
 
 ### CLI Flags for Start Command
@@ -152,6 +155,7 @@ The `start` command supports flags to override configuration file settings:
 - All role instructions are embedded in the binary from `src/instructions/*.md`
 - The `start` function requires a StartOptions object (not optional)
 - Tmux installation is checked before starting sessions using `command-exists` package
+- Session names follow pattern `ccteam-{5randomChars}` and are used as namespaces for file isolation
 
 ## Project Structure
 ```
@@ -160,10 +164,12 @@ src/
 ├── cmd/                 # Command implementations
 │   ├── agent/           # Agent commands (send, messages)
 │   ├── init/            # Configuration file creation command
-│   └── start/           # Session initialization command
+│   ├── start/           # Session initialization command
+│   └── stop/            # Session termination command
 ├── instructions/        # Role-specific instruction documents
 ├── lib/                 # Shared utilities
 │   ├── config.ts        # Configuration loading and validation
+│   ├── error.ts         # Custom error class for consistent error handling
 │   ├── tmux.ts          # tmux command wrapper and installation check
 │   └── util.ts          # General utilities (sleep, session management, etc.)
 └── types/               # TypeScript type definitions
@@ -217,3 +223,9 @@ bun run build && node dist/main.js start
 - Commit messages should follow Conventional Commits format
 - Version bumps and CHANGELOG updates are handled automatically
 - NPM publishing occurs automatically on release creation
+
+## Security Considerations
+- Tool permissions can be configured per role using `allowedTools` and `disallowedTools` in configuration
+- The `skipPermissions` flag bypasses Claude Code permission prompts but should be used carefully
+- Session isolation prevents different ccteam instances from interfering with each other
+- Message files are stored in session-specific directories for security and isolation
