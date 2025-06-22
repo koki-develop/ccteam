@@ -137,6 +137,14 @@ The Manager will delegate tasks to the Leader, who will create specifications fo
 
 That's it! Your AI team will handle the rest, from planning to implementation.
 
+### 6. **Stop a team session:**
+
+When you're done with your Claude Code Team session, you can cleanly stop it using:
+
+```console
+$ npx ccteam@latest stop ccteam-XXXXX
+```
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

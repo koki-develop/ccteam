@@ -5,6 +5,7 @@ import { deleteMessageCommand } from "./cmd/agent/messages";
 import { sendCommand } from "./cmd/agent/send";
 import { initCommand } from "./cmd/init";
 import { startCommand } from "./cmd/start";
+import { stopCommand } from "./cmd/stop";
 import { CCTeamError } from "./lib/error";
 
 const program = new Command();
@@ -72,6 +73,14 @@ program
   )
   .action(async (options) => {
     await startCommand(options);
+  });
+
+program
+  .command("stop")
+  .description("Stop Claude Code Team session for specified session ID")
+  .argument("<session-id>", "The session ID to stop (e.g., ccteam-ABCDE)")
+  .action(async (sessionId, options) => {
+    await stopCommand(sessionId, options);
   });
 
 program
