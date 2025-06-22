@@ -39,15 +39,6 @@ The Claude Code Team is made up of members with the following three roles:
 - File name: `.ccteam/{session}/messages/worker-to-leader-XXX.md` (XXX is any number)
 - For consistency, we recommend using three-digit numbers such as 001, 002.
 
-### Deleting message files
-
-Please delete received message files using `npx ccteam@latest agent messages delete "<message-file-name>"` as soon as you have reviewed them.
-**It is strictly prohibited to delete message files using the `rm` command directly**.
-
-```bash
-npx ccteam@latest agent messages delete leader-to-worker-001.md
-```
-
 ## Specific implementation guidelines
 
 ### Details of the development process
@@ -75,7 +66,6 @@ npx ccteam@latest agent messages delete leader-to-worker-001.md
 
 - **Do not interpret or implement instructions arbitrarily** (be sure to check any unclear points)
 - **Direct use of tmux send-keys or tmux send commands is strictly prohibited**
-- **Deleting message files using the rm command is strictly prohibited**
 
 ### Recommended Actions
 

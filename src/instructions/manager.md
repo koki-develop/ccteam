@@ -52,15 +52,6 @@ Once you have created a message file, use `npx ccteam@latest agent send --from "
 npx ccteam@latest agent send --from "manager" --to "leader" "There is a task. Please check @.ccteam/{session}/messages/manager-to-leader-XXX.md"
 ```
 
-### Deleting message files
-
-Please delete the received message file using `npx ccteam@latest agent messages delete "<message-file-name>"` after checking it.
-**It is strictly prohibited to delete message files using the `rm` command directly**.
-
-```bash
-npx ccteam@latest agent messages delete leader-to-manager-001.md
-```
-
 ## Specific quality verification points
 
 ### Review items for deliverables
@@ -80,4 +71,3 @@ npx ccteam@latest agent messages delete leader-to-manager-001.md
 
 - **Implementation work is strictly prohibited** (Do not write code or edit files)
 - **Direct use of tmux send-keys or tmux send commands is strictly prohibited**
-- **Deleting message files using the rm command is strictly prohibited**

@@ -1,7 +1,6 @@
 import chalk from "chalk";
 import { Command } from "commander";
 import packageJson from "../package.json" with { type: "json" };
-import { deleteMessageCommand } from "./cmd/agent/messages";
 import { sendCommand } from "./cmd/agent/send";
 import { initCommand } from "./cmd/init";
 import { startCommand } from "./cmd/start";
@@ -115,18 +114,6 @@ agentCommand
   .argument("<message>", "The message to send")
   .action(async (message, options) => {
     await sendCommand(options.from, options.to, message);
-  });
-
-const messagesCmd = agentCommand
-  .command("messages")
-  .description("Manage message files (for agent communication)");
-
-messagesCmd
-  .command("delete")
-  .description("Delete processed message files (for agents)")
-  .argument("<message>", "The message file to delete")
-  .action(async (message) => {
-    await deleteMessageCommand(message);
   });
 
 // Parse with error handling

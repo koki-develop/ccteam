@@ -55,9 +55,6 @@ npx ccteam@latest init -c path/to/config.yml
 # Send message to specific role (for agents only)
 npx ccteam@latest agent send --from <role> --to <role> <message>  # role: manager|leader|worker
 
-# Delete processed message files (for agents only)
-npx ccteam@latest agent messages delete <message-file>
-
 # Stop a running session cleanly
 npx ccteam@latest stop <session-name>
 ```
@@ -81,7 +78,7 @@ The `start` command supports flags to override configuration file settings:
 
 ### Three-Role System
 1. **Manager** - Receives user requests, decomposes tasks, delegates to Leader
-2. **Leader** - Reviews Manager's tasks, creates implementation specs for Worker, reviews Worker's output  
+2. **Leader** - Reviews Manager's tasks, creates implementation specs for Worker, reviews Worker's output
 3. **Worker** - Implements code based on Leader's specifications
 
 ### Key Architectural Decisions
@@ -150,7 +147,6 @@ The `start` command supports flags to override configuration file settings:
 
 ### Important Constraints
 - Never use `tmux send-keys` directly - always use `bun run ./src/main.ts agent send --from <role> --to <role>` or `npx ccteam@latest agent send --from <role> --to <role>`
-- Never use `rm` to delete message files - always use `bun run ./src/main.ts agent messages delete` or `npx ccteam@latest agent messages delete`
 - Tmux operations must use the `tmux()` wrapper in `lib/tmux.ts`
 - All role instructions are embedded in the binary from `src/instructions/*.md`
 - The `start` function requires a StartOptions object (not optional)
@@ -162,7 +158,7 @@ The `start` command supports flags to override configuration file settings:
 src/
 ├── main.ts              # CLI entry point
 ├── cmd/                 # Command implementations
-│   ├── agent/           # Agent commands (send, messages)
+│   ├── agent/           # Agent commands (send)
 │   ├── init/            # Configuration file creation command
 │   ├── start/           # Session initialization command
 │   └── stop/            # Session termination command
