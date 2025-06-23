@@ -12,7 +12,7 @@ export async function stopCommand(session: string): Promise<void> {
 
   const tmux = new Tmux();
   const ccteam = new CCTeam(session);
-  ccteam.checkRequirements();
+  await ccteam.checkRequirements();
 
   // Validate session ID format
   if (!session || !session.startsWith("ccteam-")) {
