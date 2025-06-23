@@ -1,4 +1,3 @@
-import path from "node:path";
 import boxen from "boxen";
 import { sync as commandExists } from "command-exists";
 
@@ -42,16 +41,4 @@ export function toast({ title, message, color }: ToastParams) {
       backgroundColor: "black",
     }),
   );
-}
-
-/** @deprecated */
-async function getSessionBasePath(): Promise<string> {
-  const sessionName = await loadSessionName();
-  return path.join(process.cwd(), ".ccteam", sessionName);
-}
-
-/** @deprecated */
-export async function getMessagesPath(): Promise<string> {
-  const basePath = await getSessionBasePath();
-  return path.join(basePath, "messages");
 }
