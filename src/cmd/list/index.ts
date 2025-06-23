@@ -1,20 +1,12 @@
 import chalk from "chalk";
 import { format } from "date-fns";
-import ora from "ora";
-import { log } from "../../lib/log";
 import { SessionManager } from "../../lib/session";
 
 type ListOptions = Record<string, never>;
 
 export async function listCommand(_options: ListOptions): Promise<void> {
-  log("info", "Loading ccteam sessions...");
-
-  const spinner = ora("Checking active sessions...").start();
-
   const sessionManager = new SessionManager();
   const activeSessions = await sessionManager.listSessions();
-
-  spinner.succeed("Session check completed");
 
   if (activeSessions.length === 0) {
     console.log(chalk.gray("No active ccteam sessions found."));
