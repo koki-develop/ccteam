@@ -75,6 +75,7 @@ export async function startCommand(options: StartOptions) {
   });
 }
 
+// TODO: refactor
 function _loadConfig(options: StartOptions): Config {
   const { config: configPath, ...cliOptions } = options;
 
