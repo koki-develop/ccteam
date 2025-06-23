@@ -15,6 +15,10 @@ export class Tmux {
     return stdout.split("\n").filter((line) => line.trim() !== "");
   }
 
+  async killSession(session: string) {
+    return this.command("kill-session", "-t", session);
+  }
+
   command(...args: string[]): Promise<string> {
     return new Promise((resolve, reject) => {
       const child = spawn("tmux", args);

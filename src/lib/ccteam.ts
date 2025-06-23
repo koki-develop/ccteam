@@ -76,7 +76,7 @@ export class CCTeam {
       // Move to the left pane
       "select-pane",
       "-t",
-      this._pane("manager"),
+      this.pane("manager"),
     );
   }
 
@@ -128,7 +128,7 @@ Wait for requests from the Leader.
 
   async sendMessage({ from, to, message }: SendParams) {
     const prefix = from ? `[${from.toUpperCase()}] ` : "";
-    const pane = this._pane(to);
+    const pane = this.pane(to);
 
     await this._tmux.sendKeys(pane, `${prefix}${message}`);
     await sleep(1000);
@@ -142,15 +142,15 @@ Wait for requests from the Leader.
       allowedTools: config.allowedTools,
       disallowedTools: config.disallowedTools,
     });
-    await this._tmux.sendKeys(this._pane(role), command.join(" "));
+    await this._tmux.sendKeys(this.pane(role), command.join(" "));
     await sleep(1000);
-    await this._tmux.sendKeys(this._pane(role), "C-m"); // Enter
+    await this._tmux.sendKeys(this.pane(role), "C-m"); // Enter
     await sleep(1000);
-    await this._tmux.sendKeys(this._pane(role), "C-m"); // Enter
+    await this._tmux.sendKeys(this.pane(role), "C-m"); // Enter
     await sleep(3000);
   }
 
-  private _pane(role: Role): string {
+  pane(role: Role): string {
     const roleMap: Record<Role, number> = {
       manager: 0,
       leader: 1,
@@ -159,8 +159,12 @@ Wait for requests from the Leader.
     return `${this._session}:0.${roleMap[role]}`;
   }
 
+  sessionDir(): string {
+    return path.join(process.cwd(), ".ccteam", this._session);
+  }
+
   private _instructionsDir() {
-    return path.join(process.cwd(), ".ccteam", this._session, "instructions");
+    return path.join(this.sessionDir(), "instructions");
   }
 
   private _instructionPath(role: Role) {

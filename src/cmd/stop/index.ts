@@ -1,11 +1,11 @@
 import fs from "node:fs";
-import path from "node:path";
-import boxen from "boxen";
 import chalk from "chalk";
 import ora from "ora";
+import { CCTeam } from "../../lib/ccteam";
 import { CCTeamError } from "../../lib/error";
-import { isInstalled, tmux } from "../../lib/tmux";
-import { sleep } from "../../lib/util";
+import { log } from "../../lib/log";
+import { Tmux } from "../../lib/tmux";
+import { sleep, toast } from "../../lib/util";
 
 type StopOptions = Record<string, never>;
 
@@ -13,17 +13,12 @@ export async function stopCommand(
   sessionId: string,
   _options: StopOptions,
 ): Promise<void> {
-  console.log(
-    `${chalk.blue("[INFO]")} Stopping ccteam session: ${chalk.cyan(sessionId)}`,
-  );
+  log("info", `Stopping ccteam session: ${chalk.cyan(sessionId)}`);
 
-  // Check tmux installation
-  if (!isInstalled("tmux")) {
-    throw new CCTeamError(
-      "tmux is not installed",
-      "Please install tmux first. See: https://github.com/tmux/tmux/wiki/Installing",
-    );
-  }
+  const tmux = new Tmux();
+  const session = await tmux.getSession();
+  const ccteam = new CCTeam(session);
+  ccteam.checkRequirements();
 
   // Validate session ID format
   if (!sessionId || !sessionId.startsWith("ccteam-")) {
@@ -33,50 +28,41 @@ export async function stopCommand(
   }
 
   // Check session existence
-  const result = await tmux("list-sessions", "-F", "#{session_name}");
-  if (!result.split("\n").includes(sessionId)) {
+  const sessions = await tmux.listSessions();
+  if (!sessions.includes(sessionId)) {
     throw new CCTeamError(`Session not found: ${sessionId}`);
   }
 
   // Send Ctrl+C to each pane
   const stopSpinner = ora("Stopping Claude Code instances...").start();
-  for (let i = 0; i < 3; i++) {
-    const target = `${sessionId}:0.${i}`;
-    // Send Ctrl+C twice
-    await tmux("send-keys", "-t", target, "C-c");
-    await sleep(300);
-    await tmux("send-keys", "-t", target, "C-c");
-    await sleep(300);
-  }
+  await tmux.sendKeys(ccteam.pane("manager"), "C-c");
+  sleep(300);
+  await tmux.sendKeys(ccteam.pane("manager"), "C-c");
+  sleep(300);
+  await tmux.sendKeys(ccteam.pane("leader"), "C-c");
+  sleep(300);
+  await tmux.sendKeys(ccteam.pane("leader"), "C-c");
+  sleep(300);
+  await tmux.sendKeys(ccteam.pane("worker"), "C-c");
+  sleep(300);
+  await tmux.sendKeys(ccteam.pane("worker"), "C-c");
   stopSpinner.succeed("Claude Code instances stopped");
 
   // Terminate tmux session
   const killSpinner = ora("Terminating tmux session...").start();
-  await tmux("kill-session", "-t", sessionId);
+  await tmux.killSession(sessionId);
   killSpinner.succeed("Tmux session terminated");
 
   // Clean up session directory (.ccteam/{session}/)
-  const sessionDir = path.join(process.cwd(), ".ccteam", sessionId);
+  const sessionDir = ccteam.sessionDir();
   if (fs.existsSync(sessionDir)) {
     fs.rmSync(sessionDir, { recursive: true, force: true });
   }
 
   // Completion message
-  const message = [
-    chalk.white(
-      `Session ${chalk.cyan(sessionId)} has been successfully stopped.`,
-    ),
-  ].join("\n");
-
-  console.log(
-    boxen(message, {
-      title: "🛑 Claude Code Team Session Stopped",
-      titleAlignment: "center",
-      padding: 1,
-      margin: 1,
-      borderStyle: "round",
-      borderColor: "red",
-      backgroundColor: "black",
-    }),
-  );
+  toast({
+    title: "🛑 Claude Code Team Session Stopped",
+    message: `Session ${chalk.cyan(sessionId)} has been successfully stopped.`,
+    color: "red",
+  });
 }
