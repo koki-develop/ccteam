@@ -7,7 +7,7 @@ export async function sendCommand(from: Role, to: Role, message: string) {
   const tmux = new Tmux();
   const session = await tmux.getSession();
   const ccteam = new CCTeam(session);
-  ccteam.checkRequirements();
+  await ccteam.checkRequirements();
 
   await ccteam.sendMessage({ from, to, message });
   log("info", `Message sent to ${to}`);
