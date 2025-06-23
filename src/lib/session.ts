@@ -114,15 +114,22 @@ export class SessionManager {
     }
 
     const fileContent = fs.readFileSync(filePath, "utf8");
-    const jsonData = JSON.parse(fileContent);
 
-    const result = SessionInfoSchema.safeParse(jsonData);
-    if (!result.success) {
-      // Remove invalid JSON file
+    try {
+      const jsonData = JSON.parse(fileContent);
+
+      const result = SessionInfoSchema.safeParse(jsonData);
+      if (!result.success) {
+        // Remove invalid JSON file
+        fs.unlinkSync(filePath);
+        return null;
+      }
+
+      return result.data;
+    } catch {
+      // JSON parse error - remove invalid file and return null
       fs.unlinkSync(filePath);
       return null;
     }
-
-    return result.data;
   }
 }
