@@ -1,234 +1,78 @@
 import fs from "node:fs";
 import path from "node:path";
-import boxen from "boxen";
 import chalk from "chalk";
 import ora from "ora";
-import leaderInstruction from "../../instructions/leader.md" with {
-  type: "text",
-};
-import managerInstruction from "../../instructions/manager.md" with {
-  type: "text",
-};
-import workerInstruction from "../../instructions/worker.md" with {
-  type: "text",
-};
-import { type Config, type RoleConfig, loadConfig } from "../../lib/config";
+import { CCTeam } from "../../lib/ccteam";
+import { type Config, loadConfig } from "../../lib/config";
 import { CCTeamError } from "../../lib/error";
-import { isInstalled, send, tmux } from "../../lib/tmux";
-import { generateSessionName, quote, sleep } from "../../lib/util";
+import { log } from "../../lib/log";
+import { generateSessionName, toast } from "../../lib/util";
 
 interface StartOptions {
   config?: string;
+
   managerModel?: string;
-  managerSkipPermissions?: boolean;
-  managerAllowedTools?: string;
-  managerDisallowedTools?: string;
   leaderModel?: string;
-  leaderSkipPermissions?: boolean;
-  leaderAllowedTools?: string;
-  leaderDisallowedTools?: string;
   workerModel?: string;
+
+  managerSkipPermissions?: boolean;
+  leaderSkipPermissions?: boolean;
   workerSkipPermissions?: boolean;
+
+  managerAllowedTools?: string;
+  leaderAllowedTools?: string;
   workerAllowedTools?: string;
+
+  managerDisallowedTools?: string;
+  leaderDisallowedTools?: string;
   workerDisallowedTools?: string;
 }
 
-export function buildClaudeCommand(roleConfig: RoleConfig): string[] {
-  const command = ["claude"];
-
-  if (roleConfig.model) {
-    command.push("--model", quote(roleConfig.model));
-  }
-
-  if (roleConfig.skipPermissions) {
-    command.push("--skip-permissions");
-  }
-
-  if (roleConfig.allowedTools && roleConfig.allowedTools.length > 0) {
-    command.push("--allowedTools", quote(roleConfig.allowedTools.join(",")));
-  }
-
-  if (roleConfig.disallowedTools && roleConfig.disallowedTools.length > 0) {
-    command.push(
-      "--disallowedTools",
-      quote(roleConfig.disallowedTools.join(",")),
-    );
-  }
-
-  return command;
-}
-
 export async function startCommand(options: StartOptions) {
-  console.log(`${chalk.blue("[INFO]")} Starting ccteam initialization...`);
-
-  const tmuxCheckSpinner = ora("Checking tmux installation...").start();
-  if (!isInstalled("tmux")) {
-    tmuxCheckSpinner.fail("tmux check failed");
-    throw new CCTeamError(
-      "tmux is not installed",
-      "Please install tmux first. See: https://github.com/tmux/tmux/wiki/Installing",
-    );
-  }
-  tmuxCheckSpinner.succeed("tmux is installed");
-
-  const claudeCheckSpinner = ora("Checking claude CLI installation...").start();
-  if (!isInstalled("claude")) {
-    claudeCheckSpinner.fail("claude CLI check failed");
-    throw new CCTeamError(
-      "claude CLI is not installed",
-      "Please install Claude CLI first. See: https://docs.anthropic.com/en/docs/claude-code/overview",
-    );
-  }
-  claudeCheckSpinner.succeed("claude CLI is installed");
+  log("info", "Starting ccteam initialization...");
 
   if (options.config) {
-    console.log(`${chalk.blue("[INFO]")} Using config file: ${options.config}`);
+    log("info", `Using config file: ${options.config}`);
   }
   const config = _loadConfig(options);
 
-  const spinner = ora("Generating session name...").start();
   const session = generateSessionName();
-  spinner.succeed(`Generated session: ${chalk.cyan(session)}`);
+  const ccteam = new CCTeam(session);
 
-  const tmuxSpinner = ora("Creating tmux session...").start();
-  await tmux(
-    // Create a new session
-    "new-session",
-    "-s",
-    session,
-    "-c",
-    process.cwd(),
-    "-d",
-    ";",
-    // Split the window horizontally
-    "split-window",
-    "-t",
-    `${session}:0.0`,
-    "-h",
-    "-p",
-    "50",
-    ";",
-    // Move to the right pane
-    "select-pane",
-    "-t",
-    `${session}:0.1`,
-    ";",
-    // Split the right pane vertically
-    "split-window",
-    "-t",
-    `${session}:0.1`,
-    "-v",
-    "-p",
-    "50",
-    ";",
-    // Move to the left pane
-    "select-pane",
-    "-t",
-    `${session}:0.0`,
-  );
-  tmuxSpinner.succeed("Tmux session created with 3 panes");
+  // Check requirements
+  const requirementsSpinner = ora("Checking requirements...").start();
+  await ccteam.checkRequirements();
+  requirementsSpinner.succeed("Requirements checked");
 
-  await setupInstructions(session);
-  await setupManager(session, config);
-  await setupLeader(session, config);
-  await setupWorker(session, config);
+  // Prepare tmux session
+  const prepareSpinner = ora("Preparing tmux session...").start();
+  await ccteam.prepareSession();
+  prepareSpinner.succeed("Tmux session created");
 
-  showAttachInstructions(session);
-}
+  // Setup roles
+  const managerSpinner = ora("Setting up Manager role...").start();
+  await ccteam.setupManager(config.roles.manager);
+  managerSpinner.succeed("Manager role set up");
+  const leaderSpinner = ora("Setting up Leader role...").start();
+  await ccteam.setupLeader(config.roles.leader);
+  leaderSpinner.succeed("Leader role set up");
+  const workerSpinner = ora("Setting up Worker role...").start();
+  await ccteam.setupWorker(config.roles.worker);
+  workerSpinner.succeed("Worker role set up");
 
-async function setupInstructions(session: string) {
-  const instructionsDir = path.join(
-    process.cwd(),
-    ".ccteam",
-    session,
-    "instructions",
-  );
-  if (!fs.existsSync(instructionsDir)) {
-    fs.mkdirSync(instructionsDir, { recursive: true });
-  }
-
-  const managerInstructionPath = path.join(instructionsDir, "manager.md");
-  const leaderInstructionPath = path.join(instructionsDir, "leader.md");
-  const workerInstructionPath = path.join(instructionsDir, "worker.md");
-
-  fs.writeFileSync(managerInstructionPath, managerInstruction);
-  fs.writeFileSync(leaderInstructionPath, leaderInstruction);
-  fs.writeFileSync(workerInstructionPath, workerInstruction);
-}
-
-async function setupManager(session: string, config: Config) {
-  const spinner = ora("Initializing Manager role...").start();
-  const command = buildClaudeCommand(config.roles.manager);
-  await send({ session, to: "manager", message: command.join(" ") });
-  await sleep(3000);
-
-  const prompt = `
-You are the Manager role.
-Read @.ccteam/${session}/instructions/manager.md and understand your role.
-
-Session name: ${session}
-Wait for requests from the User.
-`.trim();
-  await send({ session, to: "manager", message: prompt });
-  spinner.succeed("Manager role initialized");
-}
-
-async function setupLeader(session: string, config: Config) {
-  const spinner = ora("Initializing Leader role...").start();
-  const command = buildClaudeCommand(config.roles.leader);
-  await send({ session, to: "leader", message: command.join(" ") });
-  await sleep(3000);
-
-  const prompt = `
-You are the Leader role.
-Read @.ccteam/${session}/instructions/leader.md and understand your role.
-
-Session name: ${session}
-Wait for requests from the Manager.
-`.trim();
-  await send({ session, to: "leader", message: prompt });
-  spinner.succeed("Leader role initialized");
-}
-
-async function setupWorker(session: string, config: Config) {
-  const spinner = ora("Initializing Worker role...").start();
-  const command = buildClaudeCommand(config.roles.worker);
-  await send({ session, to: "worker", message: command.join(" ") });
-  await sleep(3000);
-
-  const prompt = `
-You are the Worker role.
-Read @.ccteam/${session}/instructions/worker.md and understand your role.
-
-Session name: ${session}
-Wait for requests from the Leader.
-`.trim();
-  await send({ session, to: "worker", message: prompt });
-  spinner.succeed("Worker role initialized");
-}
-
-function showAttachInstructions(session: string) {
-  const message = [
-    chalk.white("Your team is set up with 3 roles:"),
-    `${chalk.cyan("  • Manager")} - Task decomposition & delegation`,
-    `${chalk.yellow("  • Leader")} - Review & implementation specs`,
-    `${chalk.magenta("  • Worker")} - Code implementation`,
-    "",
-    chalk.white("To start collaborating:"),
-    chalk.gray("  $ ") + chalk.bold(`tmux attach-session -t ${session}`),
-  ].join("\n");
-
-  console.log(
-    boxen(message, {
-      title: "🎉 Claude Code Team Ready!",
-      titleAlignment: "center",
-      padding: 1,
-      margin: 1,
-      borderStyle: "round",
-      borderColor: "green",
-      backgroundColor: "black",
-    }),
-  );
+  toast({
+    title: "🎉 Claude Code Team Ready!",
+    message: [
+      chalk.white("Your team is set up with 3 roles:"),
+      `${chalk.cyan("  • Manager")} - Task decomposition & delegation`,
+      `${chalk.yellow("  • Leader")} - Review & implementation specs`,
+      `${chalk.magenta("  • Worker")} - Code implementation`,
+      "",
+      chalk.white("To start collaborating:"),
+      chalk.gray("  $ ") + chalk.bold(`tmux attach-session -t ${session}`),
+    ].join("\n"),
+    color: "green",
+  });
 }
 
 function _loadConfig(options: StartOptions): Config {
