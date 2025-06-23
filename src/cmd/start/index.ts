@@ -6,6 +6,7 @@ import { CCTeam } from "../../lib/ccteam";
 import { type Config, loadConfig } from "../../lib/config";
 import { CCTeamError } from "../../lib/error";
 import { log } from "../../lib/log";
+import { SessionManager } from "../../lib/session";
 import { generateSessionName, toast } from "../../lib/util";
 
 interface StartOptions {
@@ -48,6 +49,10 @@ export async function startCommand(options: StartOptions) {
   const prepareSpinner = ora("Preparing tmux session...").start();
   await ccteam.prepareSession();
   prepareSpinner.succeed(`Tmux session created: ${chalk.cyan(session)}`);
+
+  // Save session info
+  const sessionManager = new SessionManager();
+  await sessionManager.saveSession(session, process.cwd());
 
   // Setup roles
   ccteam.prepareInstructions();
