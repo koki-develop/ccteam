@@ -3,21 +3,21 @@ import YAML from "yaml";
 import { z } from "zod";
 import { CCTeamError } from "./error";
 
-const RoleConfigSchema = z
-  .object({
-    model: z.string().optional(),
-    skipPermissions: z.boolean().default(false),
-    allowedTools: z.array(z.string()).optional(),
-    disallowedTools: z.array(z.string()).optional(),
-  })
-  .default({});
+const RoleConfigSchema = z.object({
+  model: z.string().optional(),
+  skipPermissions: z.boolean().default(false),
+  allowedTools: z.array(z.string()).optional(),
+  disallowedTools: z.array(z.string()).optional(),
+});
 
 const ConfigSchema = z.object({
-  roles: z.object({
-    manager: RoleConfigSchema,
-    leader: RoleConfigSchema,
-    worker: RoleConfigSchema,
-  }),
+  roles: z
+    .object({
+      manager: RoleConfigSchema.default({}),
+      leader: RoleConfigSchema.default({}),
+      worker: RoleConfigSchema.default({}),
+    })
+    .default({}),
 });
 
 export type RoleConfig = z.infer<typeof RoleConfigSchema>;

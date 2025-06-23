@@ -1,26 +1,14 @@
-import { CCTeamError } from "../../lib/error";
-import { send } from "../../lib/tmux";
+import { CCTeam } from "../../lib/ccteam";
+import { log } from "../../lib/log";
+import { Tmux } from "../../lib/tmux";
 import type { Role } from "../../lib/types";
-import { loadSessionName } from "../../lib/util";
 
 export async function sendCommand(from: Role, to: Role, message: string) {
-  const validRoles: Role[] = ["manager", "leader", "worker"];
+  const tmux = new Tmux();
+  const session = await tmux.getSession();
+  const ccteam = new CCTeam(session);
+  await ccteam.checkRequirements();
 
-  if (!validRoles.includes(from)) {
-    throw new CCTeamError(
-      `Invalid role: ${from}`,
-      "Valid roles are: manager, leader, worker",
-    );
-  }
-
-  if (!validRoles.includes(to)) {
-    throw new CCTeamError(
-      `Invalid role: ${to}`,
-      "Valid roles are: manager, leader, worker",
-    );
-  }
-
-  const session = await loadSessionName();
-  await send({ session, from, to, message });
-  console.log(`[INFO] Message sent to ${to}`);
+  await ccteam.sendMessage({ from, to, message });
+  log("info", `Message sent to ${to}`);
 }

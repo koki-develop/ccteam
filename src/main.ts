@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { Command } from "commander";
 import packageJson from "../package.json" with { type: "json" };
 import { sendCommand } from "./cmd/agent/send";
@@ -6,6 +5,8 @@ import { initCommand } from "./cmd/init";
 import { startCommand } from "./cmd/start";
 import { stopCommand } from "./cmd/stop";
 import { CCTeamError } from "./lib/error";
+import { log } from "./lib/log";
+import { asRole } from "./lib/types";
 
 const program = new Command();
 
@@ -113,7 +114,7 @@ agentCommand
   )
   .argument("<message>", "The message to send")
   .action(async (message, options) => {
-    await sendCommand(options.from, options.to, message);
+    await sendCommand(asRole(options.from), asRole(options.to), message);
   });
 
 // Parse with error handling
@@ -122,9 +123,9 @@ agentCommand
     await program.parseAsync(process.argv);
   } catch (err) {
     if (err instanceof CCTeamError) {
-      console.error(`${chalk.red("[ERROR]")} ${err.message}`);
+      log("error", err.message);
       if (err.details) {
-        console.error(`\n${err.details}`);
+        log("error", err.details);
       }
       process.exit(1);
     } else {

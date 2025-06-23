@@ -1,75 +1,45 @@
 import { spawn } from "node:child_process";
-import { sync as commandExists } from "command-exists";
-import { CCTeamError } from "./error";
-import type { Role } from "./types";
-import { sleep } from "./util";
 
-export function tmux(...args: string[]): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const child = spawn("tmux", args);
-    let stdout = "";
-    let stderr = "";
-
-    child.on("close", (code) => {
-      if (code !== 0) {
-        reject(new Error(`tmux ${args.join(" ")} failed: ${stderr}`));
-      } else {
-        resolve(stdout);
-      }
-    });
-
-    child.stdout?.on("data", (data) => {
-      stdout += data;
-    });
-
-    child.stderr?.on("data", (data) => {
-      stderr += data;
-    });
-  });
-}
-
-export type SendParams = {
-  session: string;
-  from?: Role;
-  to: Role;
-  message: string;
-};
-
-export async function send({ session, from, to, message }: SendParams) {
-  const validRoles: Role[] = ["manager", "leader", "worker"];
-  const roleMap: Record<Role, number> = {
-    manager: 0,
-    leader: 1,
-    worker: 2,
-  };
-
-  if (from && !validRoles.includes(from)) {
-    throw new CCTeamError(
-      `Invalid from role: ${from}`,
-      "Valid roles are: manager, leader, worker",
-    );
+export class Tmux {
+  sendKeys(target: string, message: string) {
+    return this.command("send-keys", "-t", target, message);
   }
 
-  if (!validRoles.includes(to)) {
-    throw new CCTeamError(
-      `Invalid to role: ${to}`,
-      "Valid roles are: manager, leader, worker",
-    );
+  async getSession(): Promise<string> {
+    const stdout = await this.command("display-message", "-p", "#S");
+    return stdout.trim();
   }
 
-  const toPane = roleMap[to];
+  async listSessions(): Promise<string[]> {
+    const stdout = await this.command("list-sessions", "-F", "#{session_name}");
+    return stdout.split("\n").filter((line) => line.trim() !== "");
+  }
 
-  const target = `${session}:0.${toPane}`;
-  await tmux(
-    "send-keys",
-    "-t",
-    target,
-    `${from ? `[${from.toUpperCase()}] ` : ""}${message}`,
-  );
-  await sleep(1000);
-  await tmux("send-keys", "-t", target, "C-m");
-}
+  async killSession(session: string) {
+    return this.command("kill-session", "-t", session);
+  }
 
-export function isInstalled(command: string): boolean {
-  return commandExists(command);
+  command(...args: string[]): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const child = spawn("tmux", args);
+      let stdout = "";
+      let stderr = "";
+
+      child.on("close", (code) => {
+        if (code !== 0) {
+          reject(new Error(`tmux ${args.join(" ")} failed: ${stderr}`));
+        } else {
+          resolve(stdout);
+        }
+      });
+
+      child.stdout?.on("data", (data) => {
+        stdout += data;
+      });
+
+      child.stderr?.on("data", (data) => {
+        stderr += data;
+      });
+    });
+  }
 }
