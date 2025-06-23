@@ -4,6 +4,7 @@ import ora from "ora";
 import { CCTeam } from "../../lib/ccteam";
 import { CCTeamError } from "../../lib/error";
 import { log } from "../../lib/log";
+import { SessionManager } from "../../lib/session";
 import { Tmux } from "../../lib/tmux";
 import { sleep, toast } from "../../lib/util";
 
@@ -52,6 +53,10 @@ export async function stopCommand(session: string): Promise<void> {
   if (fs.existsSync(sessionDir)) {
     fs.rmSync(sessionDir, { recursive: true, force: true });
   }
+
+  // Remove session info
+  const sessionManager = new SessionManager();
+  await sessionManager.deleteSession(session).catch(() => {});
 
   // Completion message
   toast({

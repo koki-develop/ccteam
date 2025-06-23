@@ -137,7 +137,26 @@ The Manager will delegate tasks to the Leader, who will create specifications fo
 
 That's it! Your AI team will handle the rest, from planning to implementation.
 
-### 6. **Stop a team session:**
+### 6. **View active sessions:**
+
+You can see all active Claude Code Team sessions at any time:
+
+```console
+$ npx ccteam@latest list
+```
+
+This shows a table with session names, start times, and working directories:
+
+```console
+SESSION           STARTED AT           WORKING DIRECTORY
+────────────────────────────────────────────────────────────────────────────────
+ccteam-abc12      2025-06-24 14:30     /path/to/project-1
+ccteam-def34      2025-06-24 15:45     /path/to/project-2
+
+Found 2 active session(s)
+```
+
+### 7. **Stop a team session:**
 
 When you're done with your Claude Code Team session, you can cleanly stop it using:
 
