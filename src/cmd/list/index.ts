@@ -14,7 +14,6 @@ export async function listCommand(_options: ListOptions): Promise<void> {
   }
 
   // Display header
-  console.log();
   console.log(
     chalk.bold("SESSION           STARTED AT           WORKING DIRECTORY"),
   );
