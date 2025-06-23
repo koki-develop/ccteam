@@ -47,7 +47,7 @@ export async function startCommand(options: StartOptions) {
   // Prepare tmux session
   const prepareSpinner = ora("Preparing tmux session...").start();
   await ccteam.prepareSession();
-  prepareSpinner.succeed("Tmux session created");
+  prepareSpinner.succeed(`Tmux session created: ${chalk.cyan(session)}`);
 
   // Setup roles
   const managerSpinner = ora("Setting up Manager role...").start();
