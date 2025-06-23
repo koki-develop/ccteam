@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0](https://github.com/koki-develop/claude-code-team/compare/v0.8.0...v0.9.0) (2025-06-23)
+
+
+### Features
+
+* Add list command for session management ([#23](https://github.com/koki-develop/claude-code-team/issues/23)) ([b839bdd](https://github.com/koki-develop/claude-code-team/commit/b839bdddd17268adbec5301f25052038f74a7c94))
+
 ## [0.8.0](https://github.com/koki-develop/claude-code-team/compare/v0.7.0...v0.8.0) (2025-06-23)
 
 
