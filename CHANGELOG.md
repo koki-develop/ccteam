@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.8.0](https://github.com/koki-develop/claude-code-team/compare/v0.7.0...v0.8.0) (2025-06-23)
+
+
+### Features
+
+* Add stop command to cleanly terminate Claude Code Team sessions ([7978827](https://github.com/koki-develop/claude-code-team/commit/79788275e161d81fcc8786a283434d5edc9b4645))
+
+
+### Bug Fixes
+
+* Remove messages delete command ([a84c1c5](https://github.com/koki-develop/claude-code-team/commit/a84c1c596583fcf9469a58b6f360cb7d0860a823))
+
 ## [0.7.0](https://github.com/koki-develop/claude-code-team/compare/v0.6.0...v0.7.0) (2025-06-21)
 
 
