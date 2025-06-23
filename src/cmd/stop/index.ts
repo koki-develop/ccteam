@@ -7,21 +7,15 @@ import { log } from "../../lib/log";
 import { Tmux } from "../../lib/tmux";
 import { sleep, toast } from "../../lib/util";
 
-type StopOptions = Record<string, never>;
-
-export async function stopCommand(
-  sessionId: string,
-  _options: StopOptions,
-): Promise<void> {
-  log("info", `Stopping ccteam session: ${chalk.cyan(sessionId)}`);
+export async function stopCommand(session: string): Promise<void> {
+  log("info", `Stopping ccteam session: ${chalk.cyan(session)}`);
 
   const tmux = new Tmux();
-  const session = await tmux.getSession();
   const ccteam = new CCTeam(session);
   ccteam.checkRequirements();
 
   // Validate session ID format
-  if (!sessionId || !sessionId.startsWith("ccteam-")) {
+  if (!session || !session.startsWith("ccteam-")) {
     throw new CCTeamError(
       "Invalid session ID format. Expected format: ccteam-XXXXX",
     );
@@ -29,8 +23,8 @@ export async function stopCommand(
 
   // Check session existence
   const sessions = await tmux.listSessions();
-  if (!sessions.includes(sessionId)) {
-    throw new CCTeamError(`Session not found: ${sessionId}`);
+  if (!sessions.includes(session)) {
+    throw new CCTeamError(`Session not found: ${session}`);
   }
 
   // Send Ctrl+C to each pane
@@ -50,7 +44,7 @@ export async function stopCommand(
 
   // Terminate tmux session
   const killSpinner = ora("Terminating tmux session...").start();
-  await tmux.killSession(sessionId);
+  await tmux.killSession(session);
   killSpinner.succeed("Tmux session terminated");
 
   // Clean up session directory (.ccteam/{session}/)
@@ -62,7 +56,7 @@ export async function stopCommand(
   // Completion message
   toast({
     title: "🛑 Claude Code Team Session Stopped",
-    message: `Session ${chalk.cyan(sessionId)} has been successfully stopped.`,
+    message: `Session ${chalk.cyan(session)} has been successfully stopped.`,
     color: "red",
   });
 }
