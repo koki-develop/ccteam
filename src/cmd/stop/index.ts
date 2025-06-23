@@ -30,15 +30,15 @@ export async function stopCommand(session: string): Promise<void> {
   // Send Ctrl+C to each pane
   const stopSpinner = ora("Stopping Claude Code instances...").start();
   await tmux.sendKeys(ccteam.pane("manager"), "C-c");
-  sleep(300);
+  await sleep(300);
   await tmux.sendKeys(ccteam.pane("manager"), "C-c");
-  sleep(300);
+  await sleep(300);
   await tmux.sendKeys(ccteam.pane("leader"), "C-c");
-  sleep(300);
+  await sleep(300);
   await tmux.sendKeys(ccteam.pane("leader"), "C-c");
-  sleep(300);
+  await sleep(300);
   await tmux.sendKeys(ccteam.pane("worker"), "C-c");
-  sleep(300);
+  await sleep(300);
   await tmux.sendKeys(ccteam.pane("worker"), "C-c");
   stopSpinner.succeed("Claude Code instances stopped");
 
