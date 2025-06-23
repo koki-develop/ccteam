@@ -5,6 +5,16 @@ export class Tmux {
     return this.command("send-keys", "-t", target, message);
   }
 
+  async getSession(): Promise<string> {
+    const stdout = await this.command("display-message", "-p", "#S");
+    return stdout.trim();
+  }
+
+  async listSessions(): Promise<string[]> {
+    const stdout = await this.command("list-sessions", "-F", "#{session_name}");
+    return stdout.split("\n").filter((line) => line.trim() !== "");
+  }
+
   command(...args: string[]): Promise<string> {
     return new Promise((resolve, reject) => {
       const child = spawn("tmux", args);
