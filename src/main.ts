@@ -2,6 +2,7 @@ import { Command } from "commander";
 import packageJson from "../package.json" with { type: "json" };
 import { sendCommand } from "./cmd/agent/send";
 import { initCommand } from "./cmd/init";
+import { listCommand } from "./cmd/list";
 import { startCommand } from "./cmd/start";
 import { stopCommand } from "./cmd/stop";
 import { CCTeamError } from "./lib/error";
@@ -79,8 +80,15 @@ program
   .command("stop")
   .description("Stop Claude Code Team session for specified session ID")
   .argument("<session-id>", "The session ID to stop (e.g., ccteam-ABCDE)")
-  .action(async (sessionId, options) => {
-    await stopCommand(sessionId, options);
+  .action(async (sessionId) => {
+    await stopCommand(sessionId);
+  });
+
+program
+  .command("list")
+  .description("List active ccteam sessions")
+  .action(async (options) => {
+    await listCommand(options);
   });
 
 program
